@@ -1,0 +1,41 @@
+{% extends 'kellcare/base.html' %}
+
+{% block title %}Home - Kellcare{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-lg mb-4">
+    <h1 class="display-4">Welcome to Kellcare</h1>
+    <p class="lead">Your trusted partner in healthcare solutions. We provide comprehensive medical services tailored to
+        your needs.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'kellcare:services' %}" role="button">Our Services</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quality Care</h5>
+                <p class="card-text">We provide the highest quality healthcare services with experienced professionals.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">24/7 Support</h5>
+                <p class="card-text">Our healthcare professionals are available round the clock for your medical needs.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Modern Facilities</h5>
+                <p class="card-text">State-of-the-art medical equipment and facilities for comprehensive healthcare.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
