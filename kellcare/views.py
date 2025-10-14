@@ -8,6 +8,11 @@ def home(request):
     return render(request, "kellcare/home.html")
 
 
+def bestsellers(request):
+    """Bestsellers page view"""
+    return render(request, "kellcare/bestsellers.html")
+
+
 def about(request):
     """About page view"""
     return render(request, "kellcare/about.html")

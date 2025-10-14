@@ -1,0 +1,269 @@
+{% extends 'kellcare/base.html' %}
+
+{% block title %}Bestsellers - Kellcare{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-lg mb-4">
+    <h1 class="display-4">Our Most Popular Services</h1>
+    <p class="lead">Discover our most sought-after healthcare services and top-rated medical professionals trusted by
+        thousands of patients.</p>
+</div>
+
+<!-- Top Services Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Most Popular Services</h2>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-primary">
+            <div class="card-header bg-primary text-white text-center">
+                <h5 class="mb-0">⭐ #1 Most Booked</h5>
+            </div>
+            <div class="card-body text-center">
+                <h4 class="card-title">General Health Checkup</h4>
+                <p class="card-text">Comprehensive health screening including blood tests, vital signs monitoring, and
+                    general physician consultation.</p>
+                <div class="mb-3">
+                    <span class="badge bg-success fs-6">95% Patient Satisfaction</span>
+                </div>
+                <div class="mb-3">
+                    <strong class="text-primary fs-5">$149</strong>
+                    <small class="text-muted"><s>$199</s></small>
+                </div>
+                <p class="text-muted">⏱️ 45 minutes | 👥 1,200+ completed</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:services' %}" class="btn btn-primary w-100">Book Now</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-warning">
+            <div class="card-header bg-warning text-dark text-center">
+                <h5 class="mb-0">🏆 #2 Most Popular</h5>
+            </div>
+            <div class="card-body text-center">
+                <h4 class="card-title">Cardiology Consultation</h4>
+                <p class="card-text">Expert heart health assessment with ECG, blood pressure monitoring, and specialist
+                    consultation.</p>
+                <div class="mb-3">
+                    <span class="badge bg-success fs-6">98% Patient Satisfaction</span>
+                </div>
+                <div class="mb-3">
+                    <strong class="text-primary fs-5">$299</strong>
+                    <small class="text-muted"><s>$349</s></small>
+                </div>
+                <p class="text-muted">⏱️ 60 minutes | 👥 850+ completed</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:services' %}" class="btn btn-warning w-100">Book Now</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-info">
+            <div class="card-header bg-info text-white text-center">
+                <h5 class="mb-0">🥉 #3 Rising Star</h5>
+            </div>
+            <div class="card-body text-center">
+                <h4 class="card-title">Pediatric Care</h4>
+                <p class="card-text">Specialized healthcare for children including vaccinations, growth monitoring, and
+                    pediatric consultations.</p>
+                <div class="mb-3">
+                    <span class="badge bg-success fs-6">96% Parent Satisfaction</span>
+                </div>
+                <div class="mb-3">
+                    <strong class="text-primary fs-5">$199</strong>
+                    <small class="text-muted"><s>$249</s></small>
+                </div>
+                <p class="text-muted">⏱️ 40 minutes | 👥 650+ completed</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:services' %}" class="btn btn-info w-100">Book Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Rated Doctors Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Top Rated Doctors</h2>
+        <p class="text-center text-muted mb-4">Meet our most trusted and experienced medical professionals</p>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 80px; height: 80px; font-size: 2rem;">
+                    👨‍⚕️
+                </div>
+                <h5 class="card-title">Dr. Sarah Johnson</h5>
+                <p class="card-text text-muted">Cardiologist</p>
+                <div class="mb-2">
+                    <span class="text-warning">⭐⭐⭐⭐⭐</span>
+                    <small class="text-muted">(4.9/5)</small>
+                </div>
+                <p class="small">15+ years experience<br>500+ successful treatments</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 80px; height: 80px; font-size: 2rem;">
+                    👩‍⚕️
+                </div>
+                <h5 class="card-title">Dr. Michael Chen</h5>
+                <p class="card-text text-muted">Neurologist</p>
+                <div class="mb-2">
+                    <span class="text-warning">⭐⭐⭐⭐⭐</span>
+                    <small class="text-muted">(4.8/5)</small>
+                </div>
+                <p class="small">12+ years experience<br>400+ successful treatments</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="rounded-circle bg-info text-white d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 80px; height: 80px; font-size: 2rem;">
+                    👩‍⚕️
+                </div>
+                <h5 class="card-title">Dr. Emily Rodriguez</h5>
+                <p class="card-text text-muted">Pediatrician</p>
+                <div class="mb-2">
+                    <span class="text-warning">⭐⭐⭐⭐⭐</span>
+                    <small class="text-muted">(4.9/5)</small>
+                </div>
+                <p class="small">10+ years experience<br>800+ happy families</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 80px; height: 80px; font-size: 2rem;">
+                    👨‍⚕️
+                </div>
+                <h5 class="card-title">Dr. Robert Thompson</h5>
+                <p class="card-text text-muted">Orthopedic Surgeon</p>
+                <div class="mb-2">
+                    <span class="text-warning">⭐⭐⭐⭐⭐</span>
+                    <small class="text-muted">(4.7/5)</small>
+                </div>
+                <p class="small">18+ years experience<br>300+ surgeries</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Special Offers Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Special Healthcare Packages</h2>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🎯 Most Popular Package</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Annual Wellness Package</h4>
+                <ul class="list-unstyled">
+                    <li>✅ 4 General Health Checkups</li>
+                    <li>✅ Annual Blood Work Panel</li>
+                    <li>✅ Dental Cleaning (2x)</li>
+                    <li>✅ Eye Examination</li>
+                    <li>✅ Vaccination Updates</li>
+                    <li>✅ 24/7 Telemedicine Access</li>
+                </ul>
+                <div class="text-center">
+                    <strong class="text-success fs-4">$599</strong>
+                    <small class="text-muted"><s>$899</s> (Save $300)</small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:contact' %}" class="btn btn-success w-100">Get This Package</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">👨‍👩‍👧‍👦 Family Favorite</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Family Care Package</h4>
+                <ul class="list-unstyled">
+                    <li>✅ Health Checkups for 4 Members</li>
+                    <li>✅ Pediatric Care (2 Children)</li>
+                    <li>✅ Family Medical History Setup</li>
+                    <li>✅ Emergency Care Priority</li>
+                    <li>✅ Health Education Sessions</li>
+                    <li>✅ Nutrition Counseling</li>
+                </ul>
+                <div class="text-center">
+                    <strong class="text-primary fs-4">$799</strong>
+                    <small class="text-muted"><s>$1,199</s> (Save $400)</small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:contact' %}" class="btn btn-primary w-100">Get This Package</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="bg-light p-4 rounded">
+            <h3 class="text-center mb-4">Why Patients Choose Kellcare</h3>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h2 class="text-primary">15,000+</h2>
+                    <p class="text-muted">Happy Patients</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-success">98%</h2>
+                    <p class="text-muted">Success Rate</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-info">50+</h2>
+                    <p class="text-muted">Expert Doctors</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-warning">24/7</h2>
+                    <p class="text-muted">Emergency Care</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="row">
+    <div class="col-12">
+        <div class="text-center bg-primary text-white p-5 rounded">
+            <h3>Ready to Experience Premium Healthcare?</h3>
+            <p class="lead">Join thousands of satisfied patients who trust Kellcare for their health needs.</p>
+            <a href="{% url 'kellcare:contact' %}" class="btn btn-light btn-lg me-3">Contact Us</a>
+            <a href="{% url 'kellcare:services' %}" class="btn btn-outline-light btn-lg">View All Services</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
