@@ -1,0 +1,309 @@
+{% extends 'kellcare/base.html' %}
+
+{% block title %}Major Locations - Kellcare{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-lg mb-4">
+    <h1 class="display-4">Major Healthcare Locations</h1>
+    <p class="lead">Discover our flagship medical centers and major facilities serving millions across the nation.
+        Kellcare operates {{ total_facilities }} world-class healthcare facilities across {{ states_served }} states.
+    </p>
+</div>
+
+<!-- Network Statistics -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="bg-light p-4 rounded mint-shadow">
+            <h3 class="text-center mb-4 gradient-text">Our Healthcare Network</h3>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h2 class="text-primary">{{ total_facilities }}+</h2>
+                    <p class="text-muted">Major Facilities</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-success">{{ states_served }}</h2>
+                    <p class="text-muted">States Served</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-info">50,000+</h2>
+                    <p class="text-muted">Healthcare Professionals</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-warning">2M+</h2>
+                    <p class="text-muted">Patients Served Annually</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flagship Hospital -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4 gradient-text">🏥 Flagship Medical Center</h2>
+        <div class="card mint-shadow">
+            <div class="card-header" style="background: var(--mint-gradient); color: white;">
+                <h3 class="mb-0 text-center">{{ flagship_hospital }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>🌟 Premier Healthcare Facility</h5>
+                        <p>Our flagship {{ flagship_hospital }} represents the pinnacle of modern healthcare. This
+                            1,200-bed facility serves as our primary research and teaching hospital.</p>
+
+                        <h6>🎯 Specialized Centers:</h6>
+                        <ul class="list-unstyled">
+                            <li>🫀 Advanced Cardiac Surgery Center</li>
+                            <li>🧠 Neuroscience & Brain Institute</li>
+                            <li>🩺 Cancer Treatment & Research Center</li>
+                            <li>👶 Children's Hospital Wing</li>
+                            <li>🚑 Level 1 Trauma Center</li>
+                            <li>🔬 Medical Research Laboratories</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>📍 Location Details</h5>
+                        <p>
+                            <strong>Address:</strong><br>
+                            1000 Medical Plaza Drive<br>
+                            Metropolitan Health District<br>
+                            New York, NY 10001
+                        </p>
+                        <p>
+                            <strong>📞 Main Line:</strong> (555) 100-2000<br>
+                            <strong>🚑 Emergency:</strong> (555) 911-HELP<br>
+                            <strong>⏰ Emergency:</strong> 24/7/365<br>
+                            <strong>🏥 General Services:</strong> 24/7
+                        </p>
+
+                        <div class="mt-3">
+                            <a href="tel:+15551002000" class="btn btn-primary me-2">📞 Call Main</a>
+                            <a href="#directions" class="btn btn-outline-primary">🗺️ Directions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Major City Locations -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4 gradient-text">🌆 Major City Medical Centers</h2>
+    </div>
+
+    {% for city in major_cities %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h5 class="mb-0">🏙️ {{ city }}</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">Kellcare {{ city }} Medical Center</h6>
+                <p class="card-text">
+                    Premier healthcare facility serving the greater {{ city }} metropolitan area with comprehensive
+                    medical services.
+                </p>
+
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <small class="text-muted">Beds</small><br>
+                        <strong>800+</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Specialists</small><br>
+                        <strong>200+</strong>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <span class="badge bg-success me-1">Emergency</span>
+                    <span class="badge bg-info me-1">Surgery</span>
+                    <span class="badge bg-warning text-dark">ICU</span>
+                </div>
+
+                <ul class="list-unstyled small">
+                    <li>🫀 Cardiology Center</li>
+                    <li>🧠 Neurology Department</li>
+                    <li>👶 Maternity Ward</li>
+                    <li>🔬 Diagnostic Imaging</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid gap-2">
+                    <a href="#contact" class="btn btn-primary btn-sm">Contact {{ city }}</a>
+                    <a href="#directions" class="btn btn-outline-primary btn-sm">🗺️ Get Directions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Regional Networks -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4 gradient-text">🌍 Regional Healthcare Networks</h2>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🌊 East Coast Network</h5>
+            </div>
+            <div class="card-body">
+                <h6>Major Facilities:</h6>
+                <ul class="list-unstyled">
+                    <li>🏥 New York - {{ flagship_hospital }}</li>
+                    <li>🏥 Boston - Kellcare New England Medical</li>
+                    <li>🏥 Philadelphia - Kellcare Liberty Medical</li>
+                    <li>🏥 Miami - Kellcare South Florida</li>
+                    <li>🏥 Atlanta - Kellcare Southeast Regional</li>
+                </ul>
+                <p class="text-muted small">Serving 15 million patients across the Eastern United States</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">🏔️ West Coast Network</h5>
+            </div>
+            <div class="card-body">
+                <h6>Major Facilities:</h6>
+                <ul class="list-unstyled">
+                    <li>🏥 Los Angeles - Kellcare Pacific Medical</li>
+                    <li>🏥 San Francisco - Kellcare Bay Area</li>
+                    <li>🏥 Seattle - Kellcare Northwest</li>
+                    <li>🏥 Phoenix - Kellcare Desert Regional</li>
+                    <li>🏥 Denver - Kellcare Mountain West</li>
+                </ul>
+                <p class="text-muted small">Comprehensive care from California to Colorado</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">🌾 Central Network</h5>
+            </div>
+            <div class="card-body">
+                <h6>Major Facilities:</h6>
+                <ul class="list-unstyled">
+                    <li>🏥 Chicago - Kellcare Great Lakes Medical</li>
+                    <li>🏥 Houston - Kellcare Texas Medical Center</li>
+                    <li>🏥 Dallas - Kellcare North Texas</li>
+                    <li>🏥 Kansas City - Kellcare Heartland</li>
+                    <li>🏥 Minneapolis - Kellcare North Central</li>
+                </ul>
+                <p class="text-muted small">Heartland healthcare serving America's core</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header" style="background: var(--mint-gradient); color: white;">
+                <h5 class="mb-0">🌴 Specialty & Research Centers</h5>
+            </div>
+            <div class="card-body">
+                <h6>Centers of Excellence:</h6>
+                <ul class="list-unstyled">
+                    <li>🧬 Kellcare Research Institute (Boston)</li>
+                    <li>🫀 Cardiac Surgery Center (Houston)</li>
+                    <li>🧠 Neuroscience Institute (Los Angeles)</li>
+                    <li>👶 Children's Medical Center (Chicago)</li>
+                    <li>🩺 Cancer Treatment Center (New York)</li>
+                </ul>
+                <p class="text-muted small">Leading medical research and specialized care</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Services Overview -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card mint-shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="mb-0">🌟 Comprehensive Services Across All Major Locations</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6 class="text-primary">🚑 Emergency Services</h6>
+                        <ul class="list-unstyled small">
+                            <li>24/7 Emergency Departments</li>
+                            <li>Level 1 Trauma Centers</li>
+                            <li>Air Medical Transport</li>
+                            <li>Poison Control</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-success">🏥 Inpatient Care</h6>
+                        <ul class="list-unstyled small">
+                            <li>Medical/Surgical Units</li>
+                            <li>Intensive Care Units</li>
+                            <li>Cardiac Care Units</li>
+                            <li>Maternity Services</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-info">🩺 Outpatient Services</h6>
+                        <ul class="list-unstyled small">
+                            <li>Specialty Clinics</li>
+                            <li>Same-Day Surgery</li>
+                            <li>Diagnostic Imaging</li>
+                            <li>Laboratory Services</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-warning">🔬 Advanced Care</h6>
+                        <ul class="list-unstyled small">
+                            <li>Robotic Surgery</li>
+                            <li>Transplant Services</li>
+                            <li>Clinical Research</li>
+                            <li>Telemedicine</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Information -->
+<div class="row">
+    <div class="col-12">
+        <div class="text-center bg-primary text-white p-5 rounded mint-shadow">
+            <h3>🌐 Connect with Our Major Locations</h3>
+            <p class="lead">Need help finding the right facility? Our patient navigation team is here to help.</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>📞 Patient Navigation</h5>
+                    <a href="tel:+15551234567" class="btn btn-light btn-lg">
+                        (555) 123-CARE
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <h5>🌐 Online Services</h5>
+                    <a href="#portal" class="btn btn-outline-light btn-lg">
+                        Patient Portal
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <h5>📧 General Information</h5>
+                    <a href="mailto:info@kellcare.com" class="btn btn-outline-light btn-lg">
+                        Email Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

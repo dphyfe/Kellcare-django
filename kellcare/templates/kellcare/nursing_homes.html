@@ -1,0 +1,370 @@
+{% extends 'kellcare/base.html' %}
+
+{% block title %}Nursing Homes & Rehabilitation Centers - Kellcare{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-lg mb-4">
+    <h1 class="display-4">Nursing Homes & Rehabilitation Centers</h1>
+    <p class="lead">Discover our network of premier nursing homes and rehabilitation facilities in North Carolina. Each
+        facility is carefully selected based on quality of care, staff excellence, and patient satisfaction.</p>
+</div>
+
+<!-- Filter & Sort Options -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card mint-shadow">
+            <div class="card-body">
+                <h5 class="card-title">🔍 Find the Perfect Care Facility</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Sort by Rating:</label>
+                        <select class="form-select" id="ratingFilter">
+                            <option value="all">All Ratings</option>
+                            <option value="4.5+">4.5+ Stars</option>
+                            <option value="4.0+">4.0+ Stars</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Pet-Friendly:</label>
+                        <select class="form-select" id="petFilter">
+                            <option value="all">All Facilities</option>
+                            <option value="true">Pet-Friendly Only</option>
+                            <option value="false">No Pets</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Location:</label>
+                        <select class="form-select" id="locationFilter">
+                            <option value="all">All Locations</option>
+                            <option value="asheville">Asheville Area</option>
+                            <option value="black-mountain">Black Mountain</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" onclick="applyFilters()">
+                            🔍 Filter Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Nursing Homes Grid -->
+<div class="row mb-5" id="nursingHomesGrid">
+    {% for home in nursing_homes %}
+    <div class="col-md-6 col-lg-4 mb-4 nursing-home-card" data-rating="{{ home.ratings }}"
+        data-dogs="{{ home.dogs_allowed }}"
+        data-location="{% if 'Asheville' in home.address %}asheville{% elif 'Black Mountain' in home.address %}black-mountain{% else %}other{% endif %}">
+
+        <div class="card h-100 mint-shadow">
+            <!-- Quality Indicator Bar -->
+            <div class="quality-bar bg-{{ home.bar }}" style="height: 4px;"></div>
+
+            <!-- Image -->
+            <div class="position-relative">
+                <img src="{{ home.img }}" class="card-img-top" alt="{{ home.title }}"
+                    style="height: 200px; object-fit: cover;">
+
+                <!-- Rating Badge -->
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-dark bg-opacity-75 fs-6">
+                        ⭐ {{ home.ratings }}
+                    </span>
+                </div>
+
+                <!-- Pet-Friendly Badge -->
+                {% if home.dogs_allowed == "true" %}
+                <div class="position-absolute top-0 start-0 m-2">
+                    <span class="badge bg-success">
+                        🐕 Pet-Friendly
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{ home.title }}</h5>
+                <p class="card-text">
+                    <small class="text-muted">
+                        📍 {{ home.address }}
+                    </small>
+                </p>
+
+                <!-- Key Ratings Overview -->
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">Nursing Care</small>
+                        <strong class="text-success">{{ home.nursing_care_ratings }}/5.0</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block">Overall Rating</small>
+                        <strong class="text-primary">{{ home.ratings }}/5.0</strong>
+                    </div>
+                </div>
+
+                <!-- Detailed Ratings -->
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Quality Ratings:</h6>
+
+                    <!-- Food Ratings -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small>🍽️ Food Quality</small>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-2" style="width: 60px; height: 8px;">
+                                <div class="progress-bar bg-primary" style="width: 80%"></div>
+                            </div>
+                            <small class="text-muted">{{ home.food_ratings }}</small>
+                        </div>
+                    </div>
+
+                    <!-- Staff Ratings -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small>👥 Staff Care</small>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-2" style="width: 60px; height: 8px;">
+                                <div class="progress-bar bg-success" style="width: 75%"></div>
+                            </div>
+                            <small class="text-muted">{{ home.staff_ratings }}</small>
+                        </div>
+                    </div>
+
+                    <!-- Cleanliness Ratings -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small>🧽 Cleanliness</small>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-2" style="width: 60px; height: 8px;">
+                                <div class="progress-bar bg-info" style="width: 85%"></div>
+                            </div>
+                            <small class="text-muted">{{ home.cleanliness_ratings }}</small>
+                        </div>
+                    </div>
+
+                    <!-- Safety Ratings -->
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <small>🛡️ Safety</small>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-2" style="width: 60px; height: 8px;">
+                                <div class="progress-bar bg-warning" style="width: 78%"></div>
+                            </div>
+                            <small class="text-muted">{{ home.safety_ratings }}</small>
+                        </div>
+                    </div>
+
+                    <!-- Atmosphere Ratings -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small>🏠 Atmosphere</small>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-2" style="width: 60px; height: 8px;">
+                                <div class="progress-bar" style="background: var(--mint-gradient); width: 88%"></div>
+                            </div>
+                            <small class="text-muted">{{ home.atmosphere_ratings }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Features -->
+                <div class="mb-3">
+                    <div class="d-flex flex-wrap gap-1">
+                        {% if home.nursing_care_ratings >= "4.5" %}
+                        <span class="badge bg-success">Excellence in Care</span>
+                        {% endif %}
+                        {% if home.dogs_allowed == "true" %}
+                        <span class="badge bg-info">Pet-Friendly</span>
+                        {% endif %}
+                        {% if home.ratings >= "4.3" %}
+                        <span class="badge bg-warning text-dark">Top Rated</span>
+                        {% endif %}
+                        <span class="badge bg-secondary">Rehabilitation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-transparent">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-sm" onclick="viewDetails('{{ home.title }}')">
+                        📋 View Details
+                    </button>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="tel:+1234567890" class="btn btn-outline-success btn-sm w-100">
+                                📞 Call
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-outline-info btn-sm w-100"
+                                onclick="showMap('{{ home.location }}', '{{ home.title }}')">
+                                🗺️ Map
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Comparison Tool -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card mint-shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">📊 Compare Facilities</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Facility Name</th>
+                                <th>Overall Rating</th>
+                                <th>Nursing Care</th>
+                                <th>Food Quality</th>
+                                <th>Staff Care</th>
+                                <th>Pet-Friendly</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for home in nursing_homes %}
+                            <tr>
+                                <td><strong>{{ home.title }}</strong></td>
+                                <td>
+                                    <span class="badge bg-primary">{{ home.ratings }} ⭐</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">{{ home.nursing_care_ratings }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ home.food_ratings }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">{{ home.staff_ratings }}</span>
+                                </td>
+                                <td>
+                                    {% if home.dogs_allowed == "true" %}
+                                    <span class="text-success">🐕 Yes</span>
+                                    {% else %}
+                                    <span class="text-muted">❌ No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {% if 'Asheville' in home.address %}
+                                        Asheville, NC
+                                        {% elif 'Black Mountain' in home.address %}
+                                        Black Mountain, NC
+                                        {% else %}
+                                        {{ home.address|slice:":20" }}...
+                                        {% endif %}
+                                    </small>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact & Information -->
+<div class="row">
+    <div class="col-12">
+        <div class="text-center bg-primary text-white p-5 rounded mint-shadow">
+            <h3>🤝 Need Help Choosing the Right Facility?</h3>
+            <p class="lead">Our care coordinators are here to help you find the perfect nursing home or rehabilitation
+                center for your loved one.</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>📞 Care Coordination</h5>
+                    <a href="tel:+15551234567" class="btn btn-light btn-lg">
+                        (555) 123-CARE
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <h5>📧 Email Consultation</h5>
+                    <a href="mailto:nursing@kellcare.com" class="btn btn-outline-light btn-lg">
+                        nursing@kellcare.com
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <h5>📅 Schedule Visit</h5>
+                    <a href="{% url 'kellcare:contact' %}" class="btn btn-outline-light btn-lg">
+                        Book Tour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple filtering functionality
+    function applyFilters() {
+        const ratingFilter = document.getElementById('ratingFilter').value;
+        const petFilter = document.getElementById('petFilter').value;
+        const locationFilter = document.getElementById('locationFilter').value;
+        const cards = document.querySelectorAll('.nursing-home-card');
+
+        cards.forEach(card => {
+            let show = true;
+
+            // Rating filter
+            if (ratingFilter !== 'all') {
+                const rating = parseFloat(card.dataset.rating);
+                const minRating = parseFloat(ratingFilter.replace('+', ''));
+                if (rating < minRating) show = false;
+            }
+
+            // Pet filter
+            if (petFilter !== 'all') {
+                if (card.dataset.dogs !== petFilter) show = false;
+            }
+
+            // Location filter
+            if (locationFilter !== 'all') {
+                if (card.dataset.location !== locationFilter) show = false;
+            }
+
+            card.style.display = show ? 'block' : 'none';
+        });
+    }
+
+    function viewDetails(facilityName) {
+        alert(`Viewing details for: ${facilityName}\n\nThis would typically open a detailed page or modal with more information about the facility.`);
+    }
+
+    function showMap(coordinates, facilityName) {
+        const [lat, lng] = coordinates.split(', ');
+        const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+        window.open(googleMapsUrl, '_blank');
+    }
+</script>
+
+<style>
+    .quality-bar.bg-green {
+        background-color: #28a745 !important;
+    }
+
+    .quality-bar.bg-yellow {
+        background-color: #ffc107 !important;
+    }
+
+    .quality-bar.bg-red {
+        background-color: #dc3545 !important;
+    }
+
+    .nursing-home-card {
+        transition: all 0.3s ease;
+    }
+
+    .nursing-home-card:hover {
+        transform: translateY(-3px);
+    }
+</style>
+
+{% endblock %}
