@@ -138,6 +138,17 @@ def nursing_homes(request):
     return render(request, "kellcare/nursing_homes.html", context)
 
 
+def pet_care(request):
+    """Pet Care Facilities page view"""
+    context = {
+        "featured_pet": "Dexter",
+        "pet_services": ["Veterinary Care", "Pet Grooming", "Pet Boarding", "Dog Training", "Pet Therapy", "Emergency Pet Care"],
+        "total_pet_facilities": 8,
+        "certified_vets": 25,
+    }
+    return render(request, "kellcare/pet_care.html", context)
+
+
 def about(request):
     """About page view"""
     return render(request, "kellcare/about.html")
