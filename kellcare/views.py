@@ -23,128 +23,177 @@ def locations(request):
 
 
 def major_locations(request):
-    """Major Locations page view"""
+    """Major Locations page view - now consuming Django REST Framework API"""
+    from .api_client import fetch_departments, fetch_doctors
+
+    # Fetch data from API endpoints instead of direct database access
+    departments_data = fetch_departments(request)
+    doctors_data = fetch_doctors(request)
+
+    # Default values in case API calls fail
+    total_departments = 0
+    total_doctors = 0
+    major_specializations = []
+    flagship_hospital = "Kellcare Medical Center"
+    departments_list = []
+
+    # Process departments data from API
+    if departments_data and "results" in departments_data:
+        departments_list = departments_data["results"]
+        total_departments = len(departments_list)
+        if departments_list:
+            flagship_hospital = departments_list[0]["name"]
+
+    # Process doctors data from API
+    if doctors_data and "results" in doctors_data:
+        doctors_list = doctors_data["results"]
+        total_doctors = len(doctors_list)
+
+        # Count specializations from API data
+        specialization_counts = {}
+        for doctor in doctors_list:
+            spec = doctor.get("specialization", "general")
+            specialization_counts[spec] = specialization_counts.get(spec, 0) + 1
+
+        # Get top 5 specializations
+        sorted_specs = sorted(specialization_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+        major_specializations = [spec[0].replace("_", " ").title() for spec in sorted_specs]
+
     context = {
-        "total_facilities": 15,
-        "states_served": 8,
-        "major_cities": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"],
-        "flagship_hospital": "Kellcare Metropolitan Medical Center",
+        "total_facilities": total_departments,
+        "total_doctors": total_doctors,
+        "states_served": 8,  # This could be calculated from doctor addresses if needed
+        "major_cities": major_specializations,  # Using specializations instead of cities
+        "flagship_hospital": flagship_hospital,
+        "departments_with_counts": departments_list[:6],  # Top 6 departments
+        "api_source": "Django REST Framework API",  # Show that data comes from API
     }
     return render(request, "kellcare/major_locations.html", context)
 
 
 def nursing_homes(request):
-    """Nursing Homes page view"""
+    """Nursing Homes page view - now consuming Django REST Framework API and geocoding API"""
+    from .api_client import fetch_doctors, fetch_departments, geocode_address_via_api
+    import random
+
+    # Fetch data from API endpoints instead of direct database access
+    doctors_data = fetch_doctors(request)
+    departments_data = fetch_departments(request)
+
+    nursing_homes_data = []
+
+    # Process doctors data from API
+    if doctors_data and "results" in doctors_data:
+        doctors_list = doctors_data["results"]
+
+        # Filter for relevant specializations
+        nursing_doctors = [doc for doc in doctors_list if doc.get("specialization") in ["general", "cardiology", "neurology"]]
+
+        # Convert API data to format expected by template
+        for doctor in nursing_doctors:
+            # Generate some sample ratings (in production, these would come from a ratings model)
+            base_rating = round(random.uniform(3.5, 4.8), 1)
+
+            # Use existing coordinates or try to geocode via API
+            location_coords = ""
+            if doctor.get("latitude") and doctor.get("longitude"):
+                location_coords = f"{doctor['latitude']}, {doctor['longitude']}"
+            elif doctor.get("address"):
+                # Try to geocode via API endpoint
+                try:
+                    geocode_result = geocode_address_via_api(request, doctor["address"])
+                    if geocode_result and geocode_result.get("latitude"):
+                        location_coords = f"{geocode_result['latitude']}, {geocode_result['longitude']}"
+                    else:
+                        location_coords = "0, 0"  # Default if geocoding fails
+                except Exception:
+                    location_coords = "0, 0"  # Default if API call fails
+            else:
+                location_coords = "0, 0"
+
+            # Get user info from nested data
+            user_data = doctor.get("user", {})
+            first_name = user_data.get("first_name", "Unknown")
+            last_name = user_data.get("last_name", "Doctor")
+
+            # Create nursing home data structure from API data
+            nursing_home = {
+                "title": f"Dr. {first_name} {last_name} Medical Center",
+                "img": doctor.get("photo") or "https://via.placeholder.com/400x300?text=Medical+Facility",
+                "details": doctor.get("bio") or f"Specializing in {doctor.get('specialization', 'General').replace('_', ' ').title()}",
+                "bar": "green" if base_rating >= 4.3 else "yellow" if base_rating >= 4.0 else "red",
+                "ratings": str(base_rating),
+                "location": location_coords,
+                "address": doctor.get("address", "Address not provided"),
+                "food_ratings": str(round(base_rating + random.uniform(-0.5, 0.3), 1)),
+                "staff_ratings": str(round(base_rating + random.uniform(-0.3, 0.4), 1)),
+                "atmosphere_ratings": str(round(base_rating + random.uniform(-0.4, 0.5), 1)),
+                "cleanliness_ratings": str(round(base_rating + random.uniform(-0.2, 0.3), 1)),
+                "safety_ratings": str(round(base_rating + random.uniform(-0.3, 0.4), 1)),
+                "dogs_allowed": "true" if random.choice([True, False]) else "false",
+                "nursing_care_ratings": str(round(base_rating + random.uniform(0.1, 0.6), 1)),
+            }
+            nursing_homes_data.append(nursing_home)
+
+    # If no doctors available from API, create sample data from departments API
+    if not nursing_homes_data and departments_data and "results" in departments_data:
+        departments_list = departments_data["results"]
+
+        for dept in departments_list[:6]:
+            base_rating = round(random.uniform(3.8, 4.6), 1)
+            nursing_home = {
+                "title": f"{dept['name']} Rehabilitation Center",
+                "img": "https://via.placeholder.com/400x300?text=Medical+Facility",
+                "details": dept.get("description", "Comprehensive healthcare facility"),
+                "bar": "green" if base_rating >= 4.2 else "yellow" if base_rating >= 3.9 else "red",
+                "ratings": str(base_rating),
+                "location": "35.6000, -82.3500",  # Default location
+                "address": "Kellcare Medical Center - Location Data Coming Soon",
+                "food_ratings": str(round(base_rating + random.uniform(-0.3, 0.2), 1)),
+                "staff_ratings": str(round(base_rating + random.uniform(-0.2, 0.3), 1)),
+                "atmosphere_ratings": str(round(base_rating + random.uniform(-0.3, 0.4), 1)),
+                "cleanliness_ratings": str(round(base_rating + random.uniform(-0.1, 0.3), 1)),
+                "safety_ratings": str(round(base_rating + random.uniform(-0.2, 0.3), 1)),
+                "dogs_allowed": "true" if random.choice([True, False]) else "false",
+                "nursing_care_ratings": str(round(base_rating + random.uniform(0.2, 0.5), 1)),
+            }
+            nursing_homes_data.append(nursing_home)
+
     context = {
-        "nursing_homes": [
-            {
-                "title": "The Laurels at Greentree Ridge",
-                "img": "https://lh3.googleusercontent.com/p/AF1QipNMdg8lLBIb4Z1KSaHLb9-Xs6tSOl25SRLHht7d=s680-w680-h510-rw",
-                "details": "Details for Card 1",
-                "bar": "green",
-                "ratings": "4.5",
-                "location": "35.6160252, -82.3240143",
-                "address": "70 Sweeten Creek Road, Asheville, NC 28803",
-                "food_ratings": "4.1",
-                "staff_ratings": "3.9",
-                "atmosphere_ratings": "4.5",
-                "cleanliness_ratings": "4.2",
-                "safety_ratings": "3.8",
-                "dogs_allowed": "true",
-                "nursing_care_ratings": "4.7",
-            },
-            {
-                "title": "North Carolina Veterans Home",
-                "img": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqPB2Q3vGcHAmQKd7hk7weg7ZD99Ru2QYyMDdzFwKj1UUdh78znKKYjJN_JrA-wwqFH97dxhjHgjCIlVx6TR5QZ_XxEIrf-lWbtI706CDBWFOxPj6m3KfHkj12JwffBdmC5gqO2=w408-h272-k-no",
-                "details": "Details for Card 2",
-                "bar": "red",
-                "ratings": "4.2",
-                "location": "35.5951, -82.3515",
-                "address": "1626 Jeurgens Court, Black Mountain, NC 28711",
-                "food_ratings": "3.7",
-                "staff_ratings": "4.2",
-                "atmosphere_ratings": "4.0",
-                "cleanliness_ratings": "3.8",
-                "safety_ratings": "4.1",
-                "dogs_allowed": "false",
-                "nursing_care_ratings": "4.3",
-            },
-            {
-                "title": "Swannanoa Valley Health and Rehabilitation",
-                "img": "https://lh3.googleusercontent.com/p/AF1QipMyacgg_i4PymsystIyQDHQiSdR7uZqfnGKGQDU=w408-h306-k-no",
-                "details": "Details for Card 3",
-                "bar": "yellow",
-                "ratings": "4.0",
-                "location": "35.6000, -82.3550",
-                "address": "1984 US Highway 70, Swannanoa, NC 28778",
-                "food_ratings": "4.3",
-                "staff_ratings": "3.8",
-                "atmosphere_ratings": "4.2",
-                "cleanliness_ratings": "4.0",
-                "safety_ratings": "3.9",
-                "dogs_allowed": "true",
-                "nursing_care_ratings": "4.5",
-            },
-            {
-                "title": "Stonecreek Health and Rehabilitation",
-                "img": "https://lh3.googleusercontent.com/p/AF1QipPNS1U5cYxqhbtmNn3vWF9cs5mRTuQB6ANlkgl2=w408-h272-k-no",
-                "details": "Details for Card 4",
-                "bar": "green",
-                "ratings": "4.3",
-                "location": "35.6100, -82.3300",
-                "address": "455 Victoria Road, Asheville, NC 28801",
-                "food_ratings": "4.0",
-                "staff_ratings": "4.1",
-                "atmosphere_ratings": "3.9",
-                "cleanliness_ratings": "4.4",
-                "safety_ratings": "4.2",
-                "dogs_allowed": "false",
-                "nursing_care_ratings": "4.6",
-            },
-            {
-                "title": "Mountain Ridge Wellness Center",
-                "img": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npxb-KMwen-EKTZSGo0rSAZQfCKVe3Cl4NBwWDSDsoFuyk8Yy82e3VapmUnQUeJhQQ9saSMFy4tg4CoKPypuVqQA6cOZq1BrkwWdFeWIUe0HExuP1RBuMW7utFwpb0zYKBGRgkc=w408-h725-k-no",
-                "details": "Details for Card 5",
-                "bar": "yellow",
-                "ratings": "4.6",
-                "location": "35.6200, -82.3300",
-                "address": "611 Old US Hwy 70 E, Black Mountain, NC 28711",
-                "food_ratings": "3.9",
-                "staff_ratings": "4.0",
-                "atmosphere_ratings": "4.4",
-                "cleanliness_ratings": "4.1",
-                "safety_ratings": "4.3",
-                "dogs_allowed": "true",
-                "nursing_care_ratings": "4.8",
-            },
-            {
-                "title": "Riverbend Health and Rehabilatation",
-                "img": "https://lh3.googleusercontent.com/p/AF1QipNLnUNKscqOLiEEFPCIJlY3az7j5LOCxlx6r7Xk=w408-h270-k-no",
-                "details": "Details for Card 6",
-                "bar": "red",
-                "ratings": "3.9",
-                "location": "35.6250, -82.3200",
-                "address": "8 Melissa Lee Drive, Jackson, NC 28711",
-                "food_ratings": "4.2",
-                "staff_ratings": "3.7",
-                "atmosphere_ratings": "4.1",
-                "cleanliness_ratings": "3.9",
-                "safety_ratings": "4.0",
-                "dogs_allowed": "false",
-                "nursing_care_ratings": "4.4",
-            },
-        ]
+        "nursing_homes": nursing_homes_data[:6],  # Limit to 6 facilities
+        "api_source": "Django REST Framework API + Geocoding API",  # Show data source
     }
     return render(request, "kellcare/nursing_homes.html", context)
 
 
 def pet_care(request):
-    """Pet Care Facilities page view"""
+    """Pet Care Facilities page view - fully consuming Django REST Framework API"""
+    from .api_client import fetch_doctors
+
+    # Consume API endpoint directly instead of database queries
+    doctors_data = fetch_doctors(request)
+
+    # Process API response
+    total_vets = 0
+    api_doctors = []
+
+    if doctors_data and "results" in doctors_data:
+        all_doctors = doctors_data["results"]
+
+        # Filter for veterinary doctors (general practitioners)
+        veterinary_doctors = [doc for doc in all_doctors if doc.get("specialization") == "general"]
+
+        total_vets = len(veterinary_doctors)
+        api_doctors = veterinary_doctors[:5]  # First 5 veterinary doctors
+
     context = {
         "featured_pet": "Dexter",
         "pet_services": ["Veterinary Care", "Pet Grooming", "Pet Boarding", "Dog Training", "Pet Therapy", "Emergency Pet Care"],
         "total_pet_facilities": 8,
-        "certified_vets": 25,
+        "certified_vets": total_vets,  # From API
+        "api_doctors": api_doctors,  # From API
+        "api_example_url": request.build_absolute_uri("/api/doctors/"),
+        "api_source": "Django REST Framework API",  # Show data source
     }
     return render(request, "kellcare/pet_care.html", context)
 
