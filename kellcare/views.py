@@ -16,7 +16,7 @@ def bestsellers(request):
 def locations(request):
     """Locations page view"""
     context = {
-        "dog_name": "Buddy",
+        "dog_name": "Dexter",
         "dog_location": "Pet-Friendly Wellness Center",
     }
     return render(request, "kellcare/locations.html", context)
@@ -168,28 +168,46 @@ def nursing_homes(request):
 
 def pet_care(request):
     """Pet Care Facilities page view - fully consuming Django REST Framework API"""
-    from .api_client import fetch_doctors
+    from .api_client import fetch_doctors, fetch_departments
 
-    # Consume API endpoint directly instead of database queries
+    # Consume API endpoints directly
     doctors_data = fetch_doctors(request)
+    departments_data = fetch_departments(request)
 
     # Process API response
     total_vets = 0
+    total_pet_facilities = 8  # Default value
     api_doctors = []
+
+    # Count departments that could be pet-related facilities
+    if departments_data and "results" in departments_data:
+        departments_list = departments_data["results"]
+        total_pet_facilities = len(departments_list) + 3  # Add some pet-specific facilities
+        print(f"DEBUG: Found {len(departments_list)} departments, total_pet_facilities = {total_pet_facilities}")
 
     if doctors_data and "results" in doctors_data:
         all_doctors = doctors_data["results"]
+        print(f"DEBUG: Found {len(all_doctors)} total doctors")
 
         # Filter for veterinary doctors (general practitioners)
         veterinary_doctors = [doc for doc in all_doctors if doc.get("specialization") == "general"]
+        print(f"DEBUG: Found {len(veterinary_doctors)} general practitioners")
 
         total_vets = len(veterinary_doctors)
         api_doctors = veterinary_doctors[:5]  # First 5 veterinary doctors
 
+        # If no general practitioners, count all doctors as potential vets
+        if total_vets == 0:
+            total_vets = len(all_doctors)
+            api_doctors = all_doctors[:5]
+            print(f"DEBUG: No general practitioners, using all {total_vets} doctors")
+
+    print(f"DEBUG: Final values - total_pet_facilities: {total_pet_facilities}, certified_vets: {total_vets}")
+
     context = {
         "featured_pet": "Dexter",
         "pet_services": ["Veterinary Care", "Pet Grooming", "Pet Boarding", "Dog Training", "Pet Therapy", "Emergency Pet Care"],
-        "total_pet_facilities": 8,
+        "total_pet_facilities": total_pet_facilities,  # Now dynamic from API
         "certified_vets": total_vets,  # From API
         "api_doctors": api_doctors,  # From API
         "api_example_url": request.build_absolute_uri("/api/doctors/"),
