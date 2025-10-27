@@ -67,6 +67,37 @@ def major_locations(request):
         "flagship_hospital": flagship_hospital,
         "departments_with_counts": departments_list[:6],  # Top 6 departments
         "api_source": "Django REST Framework API",  # Show that data comes from API
+        # YOUR CUSTOM CONTEXT - Add any data you want here
+        "custom_message": "Welcome to Kellcare Healthcare Network!",
+        "company_founded": 1995,
+        "ceo_name": "Dr. Sarah Mitchell",
+        "awards": ["Best Healthcare Provider 2024", "Excellence in Patient Care 2023", "Innovation Award 2022"],
+        "featured_services": {"emergency": "24/7 Emergency Care", "telehealth": "Virtual Consultations", "specialist": "Expert Specialist Care"},
+        "patient_satisfaction": 98.5,
+        "custom_data": {"current_year": 2025, "locations_expanded": True, "new_technology": "AI-Powered Diagnostics"},
+        # DYNAMIC ADDRESS DATA
+        "flagship_address": {
+            "street": "1000 Medical Plaza Drive",
+            "district": "Metropolitan Health District",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001",
+            "main_phone": "(555) 100-2000",
+            "emergency_phone": "(555) 911-HELP",
+            "formatted_address": "1000 Medical Plaza Drive, Metropolitan Health District, New York, NY 10001",
+        },
+        # Multiple location addresses
+        "regional_addresses": {
+            "east_coast": {
+                "new_york": {"name": "Kellcare Manhattan Medical Center", "street": "1000 Medical Plaza Drive", "city": "New York", "state": "NY", "zip": "10001", "phone": "(555) 100-2000"},
+                "boston": {"name": "Kellcare New England Medical", "street": "450 Healthcare Boulevard", "city": "Boston", "state": "MA", "zip": "02115", "phone": "(617) 555-3000"},
+                "philadelphia": {"name": "Kellcare Liberty Medical", "street": "789 Independence Avenue", "city": "Philadelphia", "state": "PA", "zip": "19104", "phone": "(215) 555-4000"},
+            },
+            "west_coast": {
+                "los_angeles": {"name": "Kellcare Pacific Medical", "street": "2500 Sunset Medical Drive", "city": "Los Angeles", "state": "CA", "zip": "90027", "phone": "(213) 555-5000"},
+                "san_francisco": {"name": "Kellcare Bay Area Medical", "street": "1850 Golden Gate Health Plaza", "city": "San Francisco", "state": "CA", "zip": "94115", "phone": "(415) 555-6000"},
+            },
+        },
     }
     return render(request, "kellcare/major_locations.html", context)
 
@@ -206,6 +237,7 @@ def pet_care(request):
 
     context = {
         "featured_pet": "Dexter",
+        "featured_pet2": "Burt",
         "pet_services": ["Veterinary Care", "Pet Grooming", "Pet Boarding", "Dog Training", "Pet Therapy", "Emergency Pet Care"],
         "total_pet_facilities": total_pet_facilities,  # Now dynamic from API
         "certified_vets": total_vets,  # From API

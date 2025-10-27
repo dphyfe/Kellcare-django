@@ -37,6 +37,71 @@
     </div>
 </div>
 
+<!-- Custom Context Section - YOUR CUSTOM DATA -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="bg-primary text-white p-4 rounded mint-shadow">
+            <h3 class="text-center mb-4">{{ custom_message }}</h3>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h4>Founded {{ company_founded }}</h4>
+                    <p>Years of Excellence</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>{{ patient_satisfaction }}%</h4>
+                    <p>Patient Satisfaction</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>CEO: {{ ceo_name }}</h4>
+                    <p>Leadership</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Awards Section -->
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🏆 Recent Awards</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for award in awards %}
+                    <li class="mb-2">
+                        <i class="fas fa-trophy text-warning"></i> {{ award }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">🔥 Featured Services</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Emergency:</strong> {{ featured_services.emergency }}
+                </div>
+                <div class="mb-3">
+                    <strong>Telehealth:</strong> {{ featured_services.telehealth }}
+                </div>
+                <div class="mb-3">
+                    <strong>Specialist:</strong> {{ featured_services.specialist }}
+                </div>
+                <div class="mt-3 p-3 bg-light rounded">
+                    <h6>Latest Innovation ({{ custom_data.current_year }}):</h6>
+                    <p class="mb-0">{{ custom_data.new_technology }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Flagship Hospital -->
 <div class="row mb-5">
     <div class="col-12">
@@ -66,19 +131,19 @@
                         <h5>📍 Location Details</h5>
                         <p>
                             <strong>Address:</strong><br>
-                            1000 Medical Plaza Drive<br>
-                            Metropolitan Health District<br>
-                            New York, NY 10001
+                            {{ flagship_address.street }}<br>
+                            {{ flagship_address.district }}<br>
+                            {{ flagship_address.city }}, {{ flagship_address.state }} {{ flagship_address.zip }}
                         </p>
                         <p>
-                            <strong>📞 Main Line:</strong> (555) 100-2000<br>
-                            <strong>🚑 Emergency:</strong> (555) 911-HELP<br>
+                            <strong>📞 Main Line:</strong> {{ flagship_address.main_phone }}<br>
+                            <strong>🚑 Emergency:</strong> {{ flagship_address.emergency_phone }}<br>
                             <strong>⏰ Emergency:</strong> 24/7/365<br>
                             <strong>🏥 General Services:</strong> 24/7
                         </p>
 
                         <div class="mt-3">
-                            <a href="tel:+15551002000" class="btn btn-primary me-2">📞 Call Main</a>
+                            <a href="tel:{{ flagship_address.main_phone|cut:' '|cut:'('|cut:')'|cut:'-' }}" class="btn btn-primary me-2">📞 Call Main</a>
                             <a href="#directions" class="btn btn-outline-primary">🗺️ Directions</a>
                         </div>
                     </div>
@@ -156,9 +221,9 @@
             <div class="card-body">
                 <h6>Major Facilities:</h6>
                 <ul class="list-unstyled">
-                    <li>🏥 New York - {{ flagship_hospital }}</li>
-                    <li>🏥 Boston - Kellcare New England Medical</li>
-                    <li>🏥 Philadelphia - Kellcare Liberty Medical</li>
+                    <li>🏥 {{ regional_addresses.east_coast.new_york.city }} - {{ regional_addresses.east_coast.new_york.name }}</li>
+                    <li>🏥 {{ regional_addresses.east_coast.boston.city }} - {{ regional_addresses.east_coast.boston.name }}</li>
+                    <li>🏥 {{ regional_addresses.east_coast.philadelphia.city }} - {{ regional_addresses.east_coast.philadelphia.name }}</li>
                     <li>🏥 Miami - Kellcare South Florida</li>
                     <li>🏥 Atlanta - Kellcare Southeast Regional</li>
                 </ul>
@@ -175,8 +240,8 @@
             <div class="card-body">
                 <h6>Major Facilities:</h6>
                 <ul class="list-unstyled">
-                    <li>🏥 Los Angeles - Kellcare Pacific Medical</li>
-                    <li>🏥 San Francisco - Kellcare Bay Area</li>
+                    <li>🏥 {{ regional_addresses.west_coast.los_angeles.city }} - {{ regional_addresses.west_coast.los_angeles.name }}</li>
+                    <li>🏥 {{ regional_addresses.west_coast.san_francisco.city }} - {{ regional_addresses.west_coast.san_francisco.name }}</li>
                     <li>🏥 Seattle - Kellcare Northwest</li>
                     <li>🏥 Phoenix - Kellcare Desert Regional</li>
                     <li>🏥 Denver - Kellcare Mountain West</li>
@@ -220,6 +285,67 @@
                     <li>🩺 Cancer Treatment Center (New York)</li>
                 </ul>
                 <p class="text-muted small">Leading medical research and specialized care</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Location Directory -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4 gradient-text">📍 Complete Location Directory</h2>
+    </div>
+
+    <!-- East Coast Locations -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🌊 East Coast Locations</h5>
+            </div>
+            <div class="card-body">
+                {% for location_key, location in regional_addresses.east_coast.items %}
+                <div class="mb-4 p-3 border rounded">
+                    <h6 class="text-primary">{{ location.name }}</h6>
+                    <p class="mb-1">
+                        <strong>📍 Address:</strong><br>
+                        {{ location.street }}<br>
+                        {{ location.city }}, {{ location.state }} {{ location.zip }}
+                    </p>
+                    <p class="mb-0">
+                        <strong>📞 Phone:</strong> {{ location.phone }}
+                    </p>
+                    <a href="tel:{{ location.phone|cut:' '|cut:'('|cut:')'|cut:'-' }}" class="btn btn-sm btn-outline-primary mt-2">
+                        📞 Call {{ location.city }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- West Coast Locations -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">🏔️ West Coast Locations</h5>
+            </div>
+            <div class="card-body">
+                {% for location_key, location in regional_addresses.west_coast.items %}
+                <div class="mb-4 p-3 border rounded">
+                    <h6 class="text-primary">{{ location.name }}</h6>
+                    <p class="mb-1">
+                        <strong>📍 Address:</strong><br>
+                        {{ location.street }}<br>
+                        {{ location.city }}, {{ location.state }} {{ location.zip }}
+                    </p>
+                    <p class="mb-0">
+                        <strong>📞 Phone:</strong> {{ location.phone }}
+                    </p>
+                    <a href="tel:{{ location.phone|cut:' '|cut:'('|cut:')'|cut:'-' }}" class="btn btn-sm btn-outline-primary mt-2">
+                        📞 Call {{ location.city }}
+                    </a>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

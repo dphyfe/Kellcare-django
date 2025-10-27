@@ -1,0 +1,9 @@
+<div class="custom-widget p-3 bg-light rounded text-center">
+    {% if icon %}
+    <div class="widget-icon mb-2">
+        <i class="{{ icon }} fa-2x text-primary"></i>
+    </div>
+    {% endif %}
+    <h4 class="widget-value text-success">{{ value }}</h4>
+    <p class="widget-title text-muted mb-0">{{ title }}</p>
+</div>
