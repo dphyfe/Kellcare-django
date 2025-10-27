@@ -125,8 +125,8 @@ def bestsellers(request):
     return render(request, "kellcare/bestsellers.html", context)
 
 
-def locations(request):
-    """Locations page view - now with dynamic context data"""
+def urgent_care(request):
+    """Urgent Care page view - specialized for emergency and urgent medical services"""
     from .api_client import fetch_doctors, fetch_departments
     import random
 
@@ -134,117 +134,122 @@ def locations(request):
     doctors_data = fetch_doctors(request)
     departments_data = fetch_departments(request)
 
-    # Dynamic location data
-    healthcare_locations = [
+    # Urgent care specific locations
+    urgent_care_locations = [
         {
             "id": 1,
-            "name": "Kellcare Main Medical Center",
-            "type": "Main Hospital",
-            "icon": "🏥",
-            "header_class": "bg-primary text-white",
-            "btn_class": "btn-primary",
-            "btn_outline": "btn-outline-primary",
-            "address": {"street": "1000 Medical Plaza Drive", "district": "Metropolitan Health District", "city": "New York", "state": "NY", "zip": "10001"},
-            "phone": "(555) 123-4567",
-            "hours": "24/7 Emergency Care",
-            "parking": "Free 3-hour parking",
-            "services": ["Emergency Care", "Surgery Center", "ICU"],
-            "service_colors": ["bg-success", "bg-info", "bg-warning text-dark"],
-            "features": ["24/7 Emergency", "Full Surgery Suite", "Advanced ICU", "Trauma Center"],
-            "specialties": ["Emergency Medicine", "General Surgery", "Critical Care"],
+            "name": "Kellcare Express Urgent Care",
+            "type": "24/7 Urgent Care",
+            "icon": "⚡",
+            "header_class": "bg-warning text-dark",
+            "btn_class": "btn-warning",
+            "btn_outline": "btn-outline-warning",
+            "address": {"street": "555 Quick Care Boulevard", "district": "Emergency Medical District", "city": "New York", "state": "NY", "zip": "10001"},
+            "phone": "(555) 911-CARE",
+            "hours": "24/7 Walk-in Care",
+            "parking": "Free 15-minute parking",
+            "services": ["Urgent Care", "X-Ray", "Lab Tests", "Minor Surgery"],
+            "service_colors": ["bg-danger", "bg-warning", "bg-info", "bg-success"],
+            "features": ["No Appointment Needed", "Fast Track Service", "On-site Imaging", "Minor Emergency Care"],
+            "specialties": ["Emergency Medicine", "Urgent Care", "Family Medicine"],
+            "wait_time": "Average 15 minutes",
+            "accepts_walk_ins": True,
         },
         {
             "id": 2,
-            "name": "Kellcare Family Clinic",
-            "type": "Outpatient Center",
-            "icon": "🏢",
-            "header_class": "bg-success text-white",
-            "btn_class": "btn-success",
-            "btn_outline": "btn-outline-success",
-            "address": {"street": "456 Wellness Boulevard", "district": "Suburban Health Plaza", "city": "New York", "state": "NY", "zip": "10002"},
-            "phone": "(555) 234-5678",
-            "hours": "Mon-Fri 8AM-6PM",
-            "parking": "Free parking available",
-            "services": ["Family Medicine", "Pediatrics", "Lab Services"],
-            "service_colors": ["bg-success", "bg-info", "bg-warning text-dark"],
-            "features": ["Family Practice", "Pediatric Care", "On-site Lab", "Wellness Programs"],
-            "specialties": ["Family Medicine", "Pediatrics", "Preventive Care"],
+            "name": "Kellcare Rapid Response Center",
+            "type": "Emergency Clinic",
+            "icon": "🚑",
+            "header_class": "bg-danger text-white",
+            "btn_class": "btn-danger",
+            "btn_outline": "btn-outline-danger",
+            "address": {"street": "333 Emergency Lane", "district": "Medical Response Zone", "city": "New York", "state": "NY", "zip": "10002"},
+            "phone": "(555) 999-HELP",
+            "hours": "24/7 Emergency Services",
+            "parking": "Emergency parking available",
+            "services": ["Emergency Care", "Trauma Care", "Cardiac Care", "Stroke Care"],
+            "service_colors": ["bg-danger", "bg-primary", "bg-warning", "bg-info"],
+            "features": ["Trauma Level II", "Helicopter Landing", "Cardiac Cath Lab", "Stroke Center"],
+            "specialties": ["Emergency Medicine", "Trauma Surgery", "Critical Care"],
+            "wait_time": "Immediate for emergencies",
+            "accepts_walk_ins": True,
         },
         {
             "id": 3,
-            "name": "Kellcare Specialty Institute",
-            "type": "Specialty Center",
-            "icon": "🔬",
+            "name": "Kellcare After-Hours Clinic",
+            "type": "Extended Hours Care",
+            "icon": "🌙",
             "header_class": "bg-info text-white",
             "btn_class": "btn-info",
             "btn_outline": "btn-outline-info",
-            "address": {"street": "789 Research Drive", "district": "Medical Innovation Campus", "city": "New York", "state": "NY", "zip": "10003"},
-            "phone": "(555) 345-6789",
-            "hours": "Mon-Sat 7AM-7PM",
-            "parking": "Valet parking available",
-            "services": ["Cardiology", "Neurology", "Research"],
-            "service_colors": ["bg-danger", "bg-primary", "bg-secondary"],
-            "features": ["Advanced Diagnostics", "Clinical Research", "Specialist Care", "Research Programs"],
-            "specialties": ["Cardiology", "Neurology", "Medical Research"],
+            "address": {"street": "777 Night Care Avenue", "district": "Extended Care Plaza", "city": "New York", "state": "NY", "zip": "10003"},
+            "phone": "(555) 247-NIGHT",
+            "hours": "Mon-Sun 6PM-6AM",
+            "parking": "Free overnight parking",
+            "services": ["After-Hours Care", "Minor Injuries", "Illness Treatment", "Prescription Refills"],
+            "service_colors": ["bg-info", "bg-success", "bg-warning", "bg-secondary"],
+            "features": ["Evening Hours", "Weekend Available", "Walk-in Welcome", "Insurance Accepted"],
+            "specialties": ["Family Medicine", "Internal Medicine", "Urgent Care"],
+            "wait_time": "Average 20 minutes",
+            "accepts_walk_ins": True,
         },
     ]
 
-    # Add API-sourced doctors to locations
+    # Add API-sourced doctors to urgent care locations
     if doctors_data and "results" in doctors_data:
         api_doctors = doctors_data["results"]
-        for i, location in enumerate(healthcare_locations):
-            # Assign doctors to locations based on specialization
+        for i, location in enumerate(urgent_care_locations):
             if i < len(api_doctors):
                 doctor = api_doctors[i]
-                location["featured_doctor"] = {"name": doctor.get("name", "Dr. Unknown"), "specialization": doctor.get("specialization", "").replace("_", " ").title(), "department": doctor.get("department_name", "General Medicine"), "consultation_fee": doctor.get("consultation_fee", "200.00")}
+                location["featured_doctor"] = {
+                    "name": doctor.get("name", "Dr. Emergency"),
+                    "specialization": doctor.get("specialization", "emergency_medicine").replace("_", " ").title(),
+                    "department": doctor.get("department_name", "Emergency Medicine"),
+                    "consultation_fee": doctor.get("consultation_fee", "150.00"),
+                }
 
-    # Dynamic department-based services
-    location_services = []
-    if departments_data and "results" in departments_data:
-        departments_list = departments_data["results"]
-        for dept in departments_list:
-            service = {"name": dept.get("name", "General Services"), "description": dept.get("description", "Comprehensive healthcare services"), "head": dept.get("head_of_department", "Medical Director"), "phone": dept.get("phone", "(555) 000-0000"), "email": dept.get("email", "info@kellcare.com")}
-            location_services.append(service)
+    # Urgent care specific services
+    urgent_care_services = [
+        {"name": "Minor Emergency Care", "description": "Non-life threatening emergencies", "wait_time": "15-30 min"},
+        {"name": "Wound Care", "description": "Cuts, burns, and injury treatment", "wait_time": "10-20 min"},
+        {"name": "Illness Treatment", "description": "Flu, fever, infections", "wait_time": "15-25 min"},
+        {"name": "Diagnostic Testing", "description": "X-rays, lab work, EKGs", "wait_time": "20-40 min"},
+    ]
 
-    # Pet therapy information
-    pet_therapy = {
-        "dog_name": "Dexter",
-        "dog_breed": "Golden Retriever",
-        "dog_age": "3 years old",
-        "dog_location": "Pet-Friendly Wellness Center",
-        "therapy_days": ["Monday", "Wednesday", "Friday"],
-        "program_description": "Our certified therapy dog program helps reduce patient anxiety and promotes healing through animal-assisted therapy.",
-        "services": ["Patient Visits", "Stress Reduction", "Child Therapy", "Recovery Support"],
+    # Emergency preparedness info
+    emergency_info = {
+        "when_to_visit": ["Minor injuries and cuts", "Fever and flu symptoms", "Sprains and strains", "Allergic reactions", "Ear and eye infections"],
+        "when_to_call_911": ["Chest pain or heart attack", "Difficulty breathing", "Severe bleeding", "Head trauma", "Stroke symptoms"],
+        "insurance_accepted": ["Most major insurance", "Medicare", "Medicaid", "Self-pay options"],
     }
 
-    # Location statistics
-    location_stats = {"total_locations": len(healthcare_locations), "total_services": len(location_services), "emergency_locations": 1, "parking_spaces": "500+", "accessibility_rating": "100% ADA Compliant", "patient_satisfaction": 96.8}
+    # Urgent care statistics
+    urgent_care_stats = {"total_locations": len(urgent_care_locations), "average_wait_time": "18 minutes", "emergency_locations": 3, "patient_satisfaction": 94.5, "hours_coverage": "24/7/365"}
 
-    # Operating hours for different location types
-    hours_info = {"emergency": "24/7/365 Emergency Care", "outpatient": "Mon-Fri 8AM-6PM, Sat 9AM-2PM", "specialty": "Mon-Sat 7AM-7PM", "weekend": "Weekend hours available at select locations"}
+    # Operating hours for urgent care
+    hours_info = {"emergency": "24/7/365 Emergency Care", "urgent_care": "24/7 Walk-in Care Available", "after_hours": "Evening & Weekend Care", "average_wait": "15-30 minutes typical"}
 
     context = {
-        "page_title": "Our Healthcare Locations",
-        "page_description": "Find convenient Kellcare facilities near you. We're committed to providing accessible healthcare services across multiple locations.",
-        # Legacy context for existing template compatibility
-        "dog_name": pet_therapy["dog_name"],
-        "dog_location": pet_therapy["dog_location"],
-        # New dynamic context
-        "healthcare_locations": healthcare_locations,
-        "location_services": location_services,
-        "pet_therapy": pet_therapy,
-        "location_stats": location_stats,
+        "page_title": "Urgent Care & Emergency Services",
+        "page_description": "Fast, reliable urgent care when you need it most. No appointment necessary - walk-ins welcome 24/7.",
+        # Urgent care specific context
+        "urgent_care_locations": urgent_care_locations,
+        "urgent_care_services": urgent_care_services,
+        "emergency_info": emergency_info,
+        "urgent_care_stats": urgent_care_stats,
         "hours_info": hours_info,
+        # Pet therapy (if applicable to urgent care)
+        "pet_therapy": {"dog_name": "Comfort", "dog_breed": "Therapy Dog", "dog_age": "4 years old", "dog_location": "Emergency Waiting Areas", "description": "Our therapy dog provides comfort to patients and families during stressful emergency situations."},
         "api_source": "Django REST Framework API",
         "current_year": 2025,
-        "hospital_network": "Kellcare Healthcare Network",
+        "hospital_network": "Kellcare Emergency Network",
     }
 
-    return render(request, "kellcare/locations.html", context)
+    return render(request, "kellcare/urgent_care.html", context)
 
 
-def major_locations(request):
-    """Major Locations page view - now consuming Django REST Framework API"""
+def locations(request):
+    """Locations page view - now consuming Django REST Framework API"""
     from .api_client import fetch_departments, fetch_doctors
 
     # Fetch data from API endpoints instead of direct database access
@@ -320,7 +325,7 @@ def major_locations(request):
             },
         },
     }
-    return render(request, "kellcare/major_locations.html", context)
+    return render(request, "kellcare/locations.html", context)
 
 
 def nursing_homes(request):

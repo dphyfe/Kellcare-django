@@ -1,0 +1,159 @@
+{% extends 'kellcare/base.html' %}
+
+{% block title %}Urgent Care Services - Kellcare{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 gradient-text">{{ page_title }}</h1>
+            <p class="lead">{{ page_description }}</p>
+        </div>
+    </div>
+
+    <!-- Emergency vs Urgent Care Info -->
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="alert alert-success">
+                <h5><i class="fas fa-clock"></i> When to Visit Urgent Care</h5>
+                <ul class="mb-0">
+                    {% for condition in emergency_info.when_to_visit %}
+                    <li>{{ condition }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="alert alert-danger">
+                <h5><i class="fas fa-exclamation-triangle"></i> When to Call 911</h5>
+                <ul class="mb-0">
+                    {% for emergency in emergency_info.when_to_call_911 %}
+                    <li>{{ emergency }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Therapy Dog Comfort Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h5><i class="fas fa-paw"></i> Comfort During Your Visit</h5>
+                <p>Meet our therapy dog {{ pet_therapy.dog_name }}! Our {{ pet_therapy.dog_age }} {{ pet_therapy.dog_breed }} provides comfort in {{ pet_therapy.dog_location }}. {{ pet_therapy.description }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Urgent Care Locations -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4 gradient-text"><i class="fas fa-map-marker-alt"></i> Our Urgent Care Centers</h2>
+        </div>
+        {% for location in urgent_care_locations %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header {{ location.header_class }}">
+                    <h5>{{ location.icon }} {{ location.name }}</h5>
+                    <small>{{ location.type }}</small>
+                </div>
+                <div class="card-body">
+                    <p><strong><i class="fas fa-map-marker-alt"></i> Address:</strong><br>
+                        {{ location.address.street }}<br>
+                        {{ location.address.district }}<br>
+                        {{ location.address.city }}, {{ location.address.state }} {{ location.address.zip }}</p>
+
+                    <p><strong><i class="fas fa-phone"></i> Phone:</strong> {{ location.phone }}</p>
+                    <p><strong><i class="fas fa-clock"></i> Hours:</strong> {{ location.hours }}</p>
+                    <p><strong><i class="fas fa-car"></i> Parking:</strong> {{ location.parking }}</p>
+
+                    {% if location.wait_time %}
+                    <p><strong><i class="fas fa-hourglass-half"></i> Wait Time:</strong> {{ location.wait_time }}</p>
+                    {% endif %}
+
+                    {% if location.featured_doctor %}
+                    <div class="bg-light p-2 rounded mb-3">
+                        <small><strong><i class="fas fa-user-md"></i> Featured Doctor:</strong><br>
+                            {{ location.featured_doctor.name }} - {{ location.featured_doctor.specialization }}</small>
+                    </div>
+                    {% endif %}
+
+                    <div class="mt-3">
+                        {% for service in location.services %}
+                        <span class="badge bg-primary me-2 mb-1">{{ service }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-grid gap-2">
+                        <a href="#directions" class="btn {{ location.btn_class }} btn-sm">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </a>
+                        <a href="tel:{{ location.phone|cut:' '|cut:'('|cut:')'|cut:'-' }}" class="btn {{ location.btn_outline }} btn-sm">
+                            <i class="fas fa-phone"></i> Call Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="bg-light p-4 rounded">
+                <h3 class="text-center mb-4"><i class="fas fa-chart-bar"></i> {{ hospital_network }} Stats</h3>
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h2 class="text-warning">{{ urgent_care_stats.total_locations }}</h2>
+                        <p class="text-muted">Urgent Care Centers</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h2 class="text-info">{{ urgent_care_stats.average_wait_time }}</h2>
+                        <p class="text-muted">Average Wait Time</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h2 class="text-success">{{ urgent_care_stats.patient_satisfaction }}%</h2>
+                        <p class="text-muted">Patient Satisfaction</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h2 class="text-danger">{{ urgent_care_stats.hours_coverage }}</h2>
+                        <p class="text-muted">Emergency Coverage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center bg-danger text-white p-4 rounded">
+                <h3><i class="fas fa-ambulance"></i> Emergency Services</h3>
+                <p class="lead mb-3">For life-threatening emergencies, call 911 immediately</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>24/7 Emergency Line</h5>
+                        <a href="tel:+15551234567" class="btn btn-light btn-lg">
+                            <i class="fas fa-phone"></i> (555) 123-4567
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Urgent Care Hotline</h5>
+                        <a href="tel:+15559876543" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-stethoscope"></i> (555) 987-6543
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Patient Transport</h5>
+                        <a href="tel:+15556543210" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-ambulance"></i> (555) 654-3210
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
