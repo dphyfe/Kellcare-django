@@ -1,374 +1,56 @@
-{% extends 'kellcare/base.html' %}
+﻿{% extends 'kellcare/base.html' %}
 
 {% block title %}Our Locations - Kellcare{% endblock %}
 
 {% block content %}
-<div class="jumbotron bg-light p-5 rounded-lg mb-4">
-    <h1 class="display-4">Our Healthcare Locations</h1>
-    <p class="lead">Find convenient Kellcare facilities near you. We're committed to providing accessible healthcare
-        services across multiple locations.</p>
-</div>
-
-<!-- Pet-Friendly Feature -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="alert alert-success mint-shadow" role="alert">
-            <div class="d-flex align-items-center">
-                <div class="me-3" style="font-size: 2rem;">🐕</div>
-                <div>
-                    <h5 class="alert-heading mb-2">Pet-Friendly Healthcare!</h5>
-                    <p class="mb-0">
-                        Meet <strong>{{ dog_name }}</strong>, our therapy dog at the <strong>{{ dog_location
-                            }}</strong>!
-                        We welcome service animals and offer pet therapy programs to help with patient comfort and
-                        healing.
-                    </p>
-                </div>
-            </div>
+<div class="container my-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 gradient-text">{{ page_title }}</h1>
+            <p class="lead">{{ page_description }}</p>
         </div>
     </div>
-</div>
 
-<!-- Main Locations Grid -->
-<div class="row mb-5">
-    <div class="col-12">
-        <h2 class="text-center mb-4 gradient-text">Our Medical Centers</h2>
-    </div>
-
-    <!-- Main Hospital -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header bg-primary text-white text-center">
-                <h5 class="mb-0">🏥 Main Medical Center</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">{{dog_name}}</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    {{dog_location}}
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 123-4567<br>
-                    <strong>⏰ Hours:</strong> 24/7 Emergency Care<br>
-                    <strong>🚗 Parking:</strong> Free 3-hour parking
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">Emergency Care</span>
-                    <span class="badge bg-info me-2">Surgery Center</span>
-                    <span class="badge bg-warning text-dark">ICU</span>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn btn-primary btn-sm">Get Directions</a>
-                    <a href="tel:+15551234567" class="btn btn-outline-primary btn-sm">📞 Call Now</a>
-                </div>
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h5>Pet-Friendly Healthcare</h5>
+                <p>Meet our therapy dog {{ pet_therapy.dog_name }}!</p>
             </div>
         </div>
     </div>
 
-    <!-- Outpatient Clinic -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header bg-success text-white text-center">
-                <h5 class="mb-0">🏢 Outpatient Center</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Kellcare Family Clinic</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    456 Wellness Boulevard<br>
-                    Suburban Health Plaza<br>
-                    New York, NY 10002
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 234-5678<br>
-                    <strong>⏰ Hours:</strong> Mon-Fri 8AM-6PM<br>
-                    <strong>🚗 Parking:</strong> Free parking available
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">Family Medicine</span>
-                    <span class="badge bg-info me-2">Pediatrics</span>
-                    <span class="badge bg-warning text-dark">Lab Services</span>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn btn-success btn-sm">Get Directions</a>
-                    <a href="tel:+15552345678" class="btn btn-outline-success btn-sm">📞 Call Now</a>
-                </div>
-            </div>
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Our Medical Centers</h2>
         </div>
-    </div>
-
-    <!-- Specialty Center -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header bg-info text-white text-center">
-                <h5 class="mb-0">🎯 Specialty Center</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Kellcare Cardiac & Neuro</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    789 Specialist Avenue<br>
-                    Advanced Care Complex<br>
-                    New York, NY 10003
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 345-6789<br>
-                    <strong>⏰ Hours:</strong> Mon-Sat 7AM-7PM<br>
-                    <strong>🚗 Parking:</strong> Valet service available
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">Cardiology</span>
-                    <span class="badge bg-info me-2">Neurology</span>
-                    <span class="badge bg-warning text-dark">Imaging</span>
+        {% for location in healthcare_locations %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>{{ location.name }}</h5>
                 </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn btn-info btn-sm">Get Directions</a>
-                    <a href="tel:+15553456789" class="btn btn-outline-info btn-sm">📞 Call Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Urgent Care -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header bg-warning text-dark text-center">
-                <h5 class="mb-0">⚡ Urgent Care</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Kellcare Express Clinic</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    321 Quick Care Street<br>
-                    Rapid Response Center<br>
-                    New York, NY 10004
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 456-7890<br>
-                    <strong>⏰ Hours:</strong> Daily 7AM-11PM<br>
-                    <strong>🚗 Parking:</strong> 15-minute express parking
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">Urgent Care</span>
-                    <span class="badge bg-info me-2">X-Ray</span>
-                    <span class="badge bg-warning text-dark">Walk-ins</span>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn btn-warning btn-sm">Get Directions</a>
-                    <a href="tel:+15554567890" class="btn btn-outline-warning btn-sm">📞 Call Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Rehabilitation Center -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header" style="background: var(--mint-gradient); color: white;">
-                <h5 class="mb-0 text-center">🏃‍♂️ Rehab Center</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Kellcare Rehabilitation</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    654 Recovery Road<br>
-                    Wellness & Therapy Hub<br>
-                    New York, NY 10005
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 567-8901<br>
-                    <strong>⏰ Hours:</strong> Mon-Fri 6AM-8PM<br>
-                    <strong>🚗 Parking:</strong> Free all-day parking
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">Physical Therapy</span>
-                    <span class="badge bg-info me-2">Occupational</span>
-                    <span class="badge bg-warning text-dark">Sports Med</span>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn btn-primary btn-sm">Get Directions</a>
-                    <a href="tel:+15555678901" class="btn btn-outline-primary btn-sm">📞 Call Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Diagnostic Center -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header" style="background: linear-gradient(135deg, #74b9b9, #6c5ce7); color: white;">
-                <h5 class="mb-0 text-center">🔬 Diagnostic Center</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Kellcare Imaging & Labs</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    987 Diagnostic Drive<br>
-                    Medical Testing Complex<br>
-                    New York, NY 10006
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 678-9012<br>
-                    <strong>⏰ Hours:</strong> Mon-Sun 6AM-10PM<br>
-                    <strong>🚗 Parking:</strong> Free 2-hour parking
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">MRI/CT Scan</span>
-                    <span class="badge bg-info me-2">Blood Work</span>
-                    <span class="badge bg-warning text-dark">Same Day</span>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn"
-                        style="background: linear-gradient(135deg, #74b9b9, #6c5ce7); color: white; border: none;">Get
-                        Directions</a>
-                    <a href="tel:+15556789012" class="btn btn-outline-info btn-sm">📞 Call Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pet-Friendly Wellness Center -->
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header" style="background: linear-gradient(135deg, #00b894, #34d399); color: white;">
-                <h5 class="mb-0 text-center">🐕 {{ dog_location }}</h5>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Meet {{ dog_name }}! 🐾</h6>
-                <p class="card-text">
-                    <strong>📍 Address:</strong><br>
-                    123 Pet Therapy Lane<br>
-                    Healing Paws Complex<br>
-                    Black Mountain , NC 28711
-                </p>
-                <p class="card-text">
-                    <strong>📞 Phone:</strong> (555) 789-0123<br>
-                    <strong>⏰ Hours:</strong> Mon-Fri 9AM-5PM<br>
-                    <strong>🐕 Special:</strong> {{ dog_name }} visits daily!
-                </p>
-                <div class="mt-3">
-                    <span class="badge bg-success me-2">Pet Therapy</span>
-                    <span class="badge bg-info me-2">Service Animals</span>
-                    <span class="badge bg-warning text-dark">Wellness</span>
-                </div>
-                <div class="mt-3 p-3 bg-light rounded">
-                    <small class="text-muted">
-                        <strong>🐾 About {{ dog_name }}:</strong> Our certified therapy dog helps patients feel more
-                        comfortable and aids in the healing process. {{ dog_name }} loves meeting new people and
-                        bringing smiles to everyone at the {{ dog_location }}!
-                    </small>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="d-grid gap-2">
-                    <a href="#directions" class="btn"
-                        style="background: linear-gradient(135deg, #00b894, #34d399); color: white; border: none;">Meet
-                        {{ dog_name }}</a>
-                    <a href="tel:+15557890123" class="btn btn-outline-success btn-sm">📞 Call Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Interactive Map Section -->
-<div class="row mb-5">
-    <div class="col-12">
-        <h2 class="text-center mb-4 gradient-text">Find Us on the Map</h2>
-        <div class="card mint-shadow">
-            <div class="card-body text-center p-4">
-                <div class="bg-light p-5 rounded"
-                    style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                    <div>
-                        <h4 class="text-muted mb-3">🗺️ Interactive Map</h4>
-                        <p class="text-muted">Our locations across the greater New York area</p>
-                        <a href="https://maps.google.com" target="_blank" class="btn btn-primary">
-                            📍 View on Google Maps
-                        </a>
+                <div class="card-body">
+                    <p><strong>Address:</strong> {{ location.address.street }}</p>
+                    <p><strong>Phone:</strong> {{ location.phone }}</p>
+                    <div class="mt-3">
+                        {% for service in location.services %}
+                        <span class="badge bg-primary me-2">{{ service }}</span>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Transportation & Accessibility -->
-<div class="row mb-5">
-    <div class="col-md-6">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">🚌 Transportation Options</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    <li class="mb-2">🚇 <strong>Subway:</strong> Multiple lines serve our locations</li>
-                    <li class="mb-2">🚌 <strong>Bus:</strong> Regular bus routes with stops nearby</li>
-                    <li class="mb-2">🚕 <strong>Taxi/Uber:</strong> Easy pickup and drop-off areas</li>
-                    <li class="mb-2">🚗 <strong>Parking:</strong> Free or low-cost parking at all sites</li>
-                    <li class="mb-2">🚲 <strong>Bike Racks:</strong> Secure bicycle parking available</li>
-                </ul>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
-    <div class="col-md-6">
-        <div class="card h-100 mint-shadow">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">♿ Accessibility Features</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    <li class="mb-2">♿ <strong>ADA Compliant:</strong> All locations fully accessible</li>
-                    <li class="mb-2">🅿️ <strong>Disabled Parking:</strong> Reserved spots near entrances</li>
-                    <li class="mb-2">🛗 <strong>Elevators:</strong> Easy access to all floors</li>
-                    <li class="mb-2">🚪 <strong>Automatic Doors:</strong> Hands-free entry systems</li>
-                    <li class="mb-2">📞 <strong>TTY Services:</strong> Communication assistance available</li>
-                </ul>
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-danger text-white p-4 rounded text-center">
+                <h3>Emergency Services</h3>
+                <p>For emergencies, call 911</p>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Emergency Contact Info -->
-<div class="row">
-    <div class="col-12">
-        <div class="text-center bg-danger text-white p-4 rounded mint-shadow">
-            <h3>🚨 Emergency Services</h3>
-            <p class="lead mb-3">For life-threatening emergencies, call 911 immediately</p>
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>24/7 Emergency Line</h5>
-                    <a href="tel:+15551234567" class="btn btn-light btn-lg">
-                        📞 (555) 123-4567
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <h5>Nurse Hotline</h5>
-                    <a href="tel:+15559876543" class="btn btn-outline-light btn-lg">
-                        🩺 (555) 987-6543
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <h5>Patient Transport</h5>
-                    <a href="tel:+15556543210" class="btn btn-outline-light btn-lg">
-                        🚑 (555) 654-3210
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock %}

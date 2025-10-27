@@ -1,0 +1,353 @@
+{% extends 'kellcare/base.html' %}
+
+{% block title %}Our Locations - Kellcare{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-lg mb-4">
+    <h1 class="display-4">{{ page_title }}</h1>
+    <p class="lead">{{ page_description }}</p>
+</div>
+
+<!-- Pet-Friendly Feature -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-success mint-shadow" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="me-3" style="font-size: 2rem;">🐕</div>
+                <div>
+                    <h5 class="alert-heading mb-2">Pet-Friendly Healthcare!</h5>
+                    <p class="mb-2">
+                        Meet <strong>{{ pet_therapy.dog_name }}</strong>, our {{ pet_therapy.dog_age }} {{ pet_therapy.dog_breed }} therapy dog at the <strong>{{ pet_therapy.dog_location }}</strong>!
+                    </p>
+                    <p class="mb-2">{{ pet_therapy.program_description }}</p>
+                    <p class="mb-0">
+                        <strong>Available:</strong> {{ pet_therapy.therapy_days|join:", " }} |
+                        <strong>Services:</strong> {{ pet_therapy.services|join:", " }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Locations Grid -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4 gradient-text">Our Medical Centers</h2>
+    </div>
+
+    {% for location in healthcare_locations %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header {{ location.header_class }} text-center">
+                <h5 class="mb-0">{{ location.icon }} {{ location.type }}</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">{{ location.name }}</h6>
+                <p class="card-text">
+                    <strong>📍 Address:</strong><br>
+                    {{ location.address.street }}<br>
+                    {{ location.address.district }}<br>
+                    {{ location.address.city }}, {{ location.address.state }} {{ location.address.zip }}
+                </p>
+                <p class="card-text">
+                    <strong>📞 Phone:</strong> {{ location.phone }}<br>
+                    <strong>⏰ Hours:</strong> {{ location.hours }}<br>
+                    <strong>🚗 Parking:</strong> {{ location.parking }}
+                </p>
+
+                {% if location.featured_doctor %}
+                <div class="mb-3 p-2 bg-light rounded">
+                    <small><strong>Featured Doctor:</strong> {{ location.featured_doctor.name }}<br>
+                        {{ location.featured_doctor.specialization }} - ${{ location.featured_doctor.consultation_fee }}</small>
+                </div>
+                {% endif %}
+
+                <div class="mt-3">
+                    {% for service in location.services %}
+                    {% if forloop.counter0 == 0 %}
+                    <span class="badge bg-success me-2">{{ service }}</span>
+                    {% elif forloop.counter0 == 1 %}
+                    <span class="badge bg-info me-2">{{ service }}</span>
+                    {% elif forloop.counter0 == 2 %}
+                    <span class="badge bg-warning text-dark me-2">{{ service }}</span>
+                    {% else %}
+                    <span class="badge bg-primary me-2">{{ service }}</span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid gap-2">
+                    <a href="#directions" class="btn {{ location.btn_class }} btn-sm">Get Directions</a>
+                    <a href="tel:{{ location.phone|cut:' '|cut:'('|cut:')'|cut:'-' }}" class="btn {{ location.btn_outline }} btn-sm">📞 Call Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Rehabilitation Center -->
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header" style="background: var(--mint-gradient); color: white;">
+                <h5 class="mb-0 text-center">🏃‍♂️ Rehab Center</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">Kellcare Rehabilitation</h6>
+                <p class="card-text">
+                    <strong>📍 Address:</strong><br>
+                    654 Recovery Road<br>
+                    Wellness & Therapy Hub<br>
+                    New York, NY 10005
+                </p>
+                <p class="card-text">
+                    <strong>📞 Phone:</strong> (555) 567-8901<br>
+                    <strong>⏰ Hours:</strong> Mon-Fri 6AM-8PM<br>
+                    <strong>🚗 Parking:</strong> Free all-day parking
+                </p>
+                <div class="mt-3">
+                    <span class="badge bg-success me-2">Physical Therapy</span>
+                    <span class="badge bg-info me-2">Occupational</span>
+                    <span class="badge bg-warning text-dark">Sports Med</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid gap-2">
+                    <a href="#directions" class="btn btn-primary btn-sm">Get Directions</a>
+                    <a href="tel:+15555678901" class="btn btn-outline-primary btn-sm">📞 Call Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diagnostic Center -->
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header" style="background: linear-gradient(135deg, #74b9b9, #6c5ce7); color: white;">
+                <h5 class="mb-0 text-center">🔬 Diagnostic Center</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">Kellcare Imaging & Labs</h6>
+                <p class="card-text">
+                    <strong>📍 Address:</strong><br>
+                    987 Diagnostic Drive<br>
+                    Medical Testing Complex<br>
+                    New York, NY 10006
+                </p>
+                <p class="card-text">
+                    <strong>📞 Phone:</strong> (555) 678-9012<br>
+                    <strong>⏰ Hours:</strong> Mon-Sun 6AM-10PM<br>
+                    <strong>🚗 Parking:</strong> Free 2-hour parking
+                </p>
+                <div class="mt-3">
+                    <span class="badge bg-success me-2">MRI/CT Scan</span>
+                    <span class="badge bg-info me-2">Blood Work</span>
+                    <span class="badge bg-warning text-dark">Same Day</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid gap-2">
+                    <a href="#directions" class="btn" style="background: linear-gradient(135deg, #74b9b9, #6c5ce7); color: white; border: none;">Get
+                        Directions</a>
+                    <a href="tel:+15556789012" class="btn btn-outline-info btn-sm">📞 Call Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pet-Friendly Wellness Center -->
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header" style="background: linear-gradient(135deg, #00b894, #34d399); color: white;">
+                <h5 class="mb-0 text-center">🐕 {{ dog_location }}</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">Meet {{ dog_name }}! 🐾</h6>
+                <p class="card-text">
+                    <strong>📍 Address:</strong><br>
+                    123 Pet Therapy Lane<br>
+                    Healing Paws Complex<br>
+                    Black Mountain , NC 28711
+                </p>
+                <p class="card-text">
+                    <strong>📞 Phone:</strong> (555) 789-0123<br>
+                    <strong>⏰ Hours:</strong> Mon-Fri 9AM-5PM<br>
+                    <strong>🐕 Special:</strong> {{ dog_name }} visits daily!
+                </p>
+                <div class="mt-3">
+                    <span class="badge bg-success me-2">Pet Therapy</span>
+                    <span class="badge bg-info me-2">Service Animals</span>
+                    <span class="badge bg-warning text-dark">Wellness</span>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <strong>🐾 About {{ dog_name }}:</strong> Our certified therapy dog helps patients feel more
+                        comfortable and aids in the healing process. {{ dog_name }} loves meeting new people and
+                        bringing smiles to everyone at the {{ dog_location }}!
+                    </small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid gap-2">
+                    <a href="#directions" class="btn" style="background: linear-gradient(135deg, #00b894, #34d399); color: white; border: none;">Meet
+                        {{ dog_name }}</a>
+                    <a href="tel:+15557890123" class="btn btn-outline-success btn-sm">📞 Call Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Map Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4 gradient-text">Find Us on the Map</h2>
+        <div class="card mint-shadow">
+            <div class="card-body text-center p-4">
+                <div class="bg-light p-5 rounded" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                    <div>
+                        <h4 class="text-muted mb-3">🗺️ Interactive Map</h4>
+                        <p class="text-muted">Our locations across the greater New York area</p>
+                        <a href="https://maps.google.com" target="_blank" class="btn btn-primary">
+                            📍 View on Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Operating Hours Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card mint-shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">🕒 Operating Hours</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6 class="text-primary">Emergency Services</h6>
+                        <p class="mb-0">{{ hours_info.emergency }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-success">Outpatient Care</h6>
+                        <p class="mb-0">{{ hours_info.outpatient }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-warning">Specialty Services</h6>
+                        <p class="mb-0">{{ hours_info.specialty }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="text-info">Weekend Availability</h6>
+                        <p class="mb-0">{{ hours_info.weekend }}</p>
+                    </div>
+                </div>
+                <div class="alert alert-info mt-3 mb-0">
+                    <small><strong>Note:</strong> Hours may vary by location and holiday schedule. Please call ahead to confirm specific service availability.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transportation & Accessibility -->
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">🚌 Transportation Options</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">🚇 <strong>Subway:</strong> Multiple lines serve our locations</li>
+                    <li class="mb-2">🚌 <strong>Bus:</strong> Regular bus routes with stops nearby</li>
+                    <li class="mb-2">🚕 <strong>Taxi/Uber:</strong> Easy pickup and drop-off areas</li>
+                    <li class="mb-2">🚗 <strong>Parking:</strong> Free or low-cost parking at all sites</li>
+                    <li class="mb-2">🚲 <strong>Bike Racks:</strong> Secure bicycle parking available</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 mint-shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">♿ Accessibility Features</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">♿ <strong>ADA Compliant:</strong> All locations fully accessible</li>
+                    <li class="mb-2">🅿️ <strong>Disabled Parking:</strong> Reserved spots near entrances</li>
+                    <li class="mb-2">🛗 <strong>Elevators:</strong> Easy access to all floors</li>
+                    <li class="mb-2">🚪 <strong>Automatic Doors:</strong> Hands-free entry systems</li>
+                    <li class="mb-2">📞 <strong>TTY Services:</strong> Communication assistance available</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Location Statistics Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="bg-light p-4 rounded mint-shadow">
+            <h3 class="text-center mb-4 gradient-text">{{ hospital_network }} Network Stats</h3>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h2 class="text-primary">{{ location_stats.total_locations }}+</h2>
+                    <p class="text-muted">Healthcare Locations</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-success">{{ location_stats.parking_spaces }}</h2>
+                    <p class="text-muted">Parking Spaces</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-info">{{ location_stats.patient_satisfaction }}%</h2>
+                    <p class="text-muted">Patient Satisfaction</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-warning">{{ location_stats.emergency_locations }}</h2>
+                    <p class="text-muted">24/7 Emergency Centers</p>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p class="text-muted">{{ location_stats.accessibility_rating }} • Powered by {{ api_source }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Contact Info -->
+<div class="row">
+    <div class="col-12">
+        <div class="text-center bg-danger text-white p-4 rounded mint-shadow">
+            <h3>🚨 Emergency Services</h3>
+            <p class="lead mb-3">For life-threatening emergencies, call 911 immediately</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>24/7 Emergency Line</h5>
+                    <a href="tel:+15551234567" class="btn btn-light btn-lg">
+                        📞 (555) 123-4567
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <h5>Nurse Hotline</h5>
+                    <a href="tel:+15559876543" class="btn btn-outline-light btn-lg">
+                        🩺 (555) 987-6543
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <h5>Patient Transport</h5>
+                    <a href="tel:+15556543210" class="btn btn-outline-light btn-lg">
+                        🚑 (555) 654-3210
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

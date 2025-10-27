@@ -12,5 +12,4 @@ urlpatterns = [
     path("locations/", views.locations, name="locations"),
     path("major_locations/", views.major_locations, name="major_locations"),
     path("nursing-homes/", views.nursing_homes, name="nursing_homes"),
-    path("pet-care/", views.pet_care, name="pet_care"),
 ]

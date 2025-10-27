@@ -9,16 +9,237 @@ def home(request):
 
 
 def bestsellers(request):
-    """Bestsellers page view"""
-    return render(request, "kellcare/bestsellers.html")
+    """Bestsellers page view - now with dynamic context data"""
+    from .api_client import fetch_doctors, fetch_departments
+
+    # Fetch data from API endpoints
+    doctors_data = fetch_doctors(request)
+    departments_data = fetch_departments(request)
+
+    # Dynamic service data
+    bestseller_services = [
+        {
+            "rank": 1,
+            "badge": "⭐ #1 Most Booked",
+            "badge_class": "bg-primary text-white",
+            "border_class": "border-primary",
+            "btn_class": "btn-primary",
+            "title": "General Health Checkup",
+            "description": "Comprehensive health screening including blood tests, vital signs monitoring, and general physician consultation.",
+            "satisfaction": 95,
+            "current_price": 149,
+            "original_price": 199,
+            "duration": "45 minutes",
+            "completed": "1,200+",
+            "icon": "🩺",
+        },
+        {
+            "rank": 2,
+            "badge": "🏆 #2 Most Popular",
+            "badge_class": "bg-warning text-dark",
+            "border_class": "border-warning",
+            "btn_class": "btn-warning",
+            "title": "Cardiology Consultation",
+            "description": "Expert heart health assessment with ECG, blood pressure monitoring, and specialist consultation.",
+            "satisfaction": 98,
+            "current_price": 299,
+            "original_price": 349,
+            "duration": "60 minutes",
+            "completed": "850+",
+            "icon": "❤️",
+        },
+        {
+            "rank": 3,
+            "badge": "🥉 #3 Rising Star",
+            "badge_class": "bg-info text-white",
+            "border_class": "border-info",
+            "btn_class": "btn-info",
+            "title": "Pediatric Care",
+            "description": "Specialized healthcare for children including vaccinations, growth monitoring, and pediatric consultations.",
+            "satisfaction": 96,
+            "current_price": 199,
+            "original_price": 249,
+            "duration": "40 minutes",
+            "completed": "650+",
+            "icon": "👶",
+        },
+    ]
+
+    # Dynamic doctor data - combine API data with ratings and experience
+    top_doctors = []
+    if doctors_data and "results" in doctors_data:
+        api_doctors = doctors_data["results"]
+
+        # Create enhanced doctor profiles
+        doctor_enhancements = [
+            {"emoji": "👨‍⚕️", "bg_class": "bg-primary", "rating": 4.9, "experience": "15+ years", "achievement": "500+ successful treatments"},
+            {"emoji": "👩‍⚕️", "bg_class": "bg-success", "rating": 4.8, "experience": "12+ years", "achievement": "400+ successful treatments"},
+            {"emoji": "👩‍⚕️", "bg_class": "bg-info", "rating": 4.9, "experience": "10+ years", "achievement": "800+ happy families"},
+            {"emoji": "👨‍⚕️", "bg_class": "bg-warning", "rating": 4.7, "experience": "18+ years", "achievement": "600+ procedures"},
+        ]
+
+        for i, doctor in enumerate(api_doctors[:4]):  # Top 4 doctors
+            enhancement = doctor_enhancements[i] if i < len(doctor_enhancements) else doctor_enhancements[0]
+
+            enhanced_doctor = {
+                "id": doctor.get("id"),
+                "name": doctor.get("name", "Dr. Unknown"),
+                "specialization": doctor.get("specialization", "").replace("_", " ").title(),
+                "department": doctor.get("department_name", "General Medicine"),
+                "emoji": enhancement["emoji"],
+                "bg_class": enhancement["bg_class"],
+                "rating": enhancement["rating"],
+                "rating_stars": "⭐" * int(enhancement["rating"]),
+                "experience": enhancement["experience"],
+                "achievement": enhancement["achievement"],
+                "consultation_fee": doctor.get("consultation_fee", "200.00"),
+            }
+            top_doctors.append(enhanced_doctor)
+
+    # Fallback doctors if API fails
+    if not top_doctors:
+        top_doctors = [
+            {"name": "Dr. Sarah Johnson", "specialization": "Cardiology", "department": "Cardiology", "emoji": "👨‍⚕️", "bg_class": "bg-primary", "rating": 4.9, "rating_stars": "⭐⭐⭐⭐⭐", "experience": "15+ years", "achievement": "500+ successful treatments"},
+            {"name": "Dr. Kelly Norcutt", "specialization": "Neurology", "department": "Neurology", "emoji": "👩‍⚕️", "bg_class": "bg-success", "rating": 4.8, "rating_stars": "⭐⭐⭐⭐⭐", "experience": "12+ years", "achievement": "400+ successful treatments"},
+        ]
+
+    # Department stats
+    department_stats = {"total_departments": 0, "total_doctors": 0, "patient_satisfaction": 97.2, "treatments_completed": "15,000+"}
+
+    if departments_data and "results" in departments_data:
+        department_stats["total_departments"] = len(departments_data["results"])
+    if doctors_data and "results" in doctors_data:
+        department_stats["total_doctors"] = len(doctors_data["results"])
+
+    context = {
+        "page_title": "Our Most Popular Services",
+        "page_description": "Discover our most sought-after healthcare services and top-rated medical professionals trusted by thousands of patients.",
+        "bestseller_services": bestseller_services,
+        "top_doctors": top_doctors,
+        "department_stats": department_stats,
+        "api_source": "Django REST Framework API",
+        "current_year": 2025,
+        "hospital_name": "Kellcare Healthcare Network",
+    }
+
+    return render(request, "kellcare/bestsellers.html", context)
 
 
 def locations(request):
-    """Locations page view"""
-    context = {
+    """Locations page view - now with dynamic context data"""
+    from .api_client import fetch_doctors, fetch_departments
+    import random
+
+    # Fetch data from API endpoints
+    doctors_data = fetch_doctors(request)
+    departments_data = fetch_departments(request)
+
+    # Dynamic location data
+    healthcare_locations = [
+        {
+            "id": 1,
+            "name": "Kellcare Main Medical Center",
+            "type": "Main Hospital",
+            "icon": "🏥",
+            "header_class": "bg-primary text-white",
+            "btn_class": "btn-primary",
+            "btn_outline": "btn-outline-primary",
+            "address": {"street": "1000 Medical Plaza Drive", "district": "Metropolitan Health District", "city": "New York", "state": "NY", "zip": "10001"},
+            "phone": "(555) 123-4567",
+            "hours": "24/7 Emergency Care",
+            "parking": "Free 3-hour parking",
+            "services": ["Emergency Care", "Surgery Center", "ICU"],
+            "service_colors": ["bg-success", "bg-info", "bg-warning text-dark"],
+            "features": ["24/7 Emergency", "Full Surgery Suite", "Advanced ICU", "Trauma Center"],
+            "specialties": ["Emergency Medicine", "General Surgery", "Critical Care"],
+        },
+        {
+            "id": 2,
+            "name": "Kellcare Family Clinic",
+            "type": "Outpatient Center",
+            "icon": "🏢",
+            "header_class": "bg-success text-white",
+            "btn_class": "btn-success",
+            "btn_outline": "btn-outline-success",
+            "address": {"street": "456 Wellness Boulevard", "district": "Suburban Health Plaza", "city": "New York", "state": "NY", "zip": "10002"},
+            "phone": "(555) 234-5678",
+            "hours": "Mon-Fri 8AM-6PM",
+            "parking": "Free parking available",
+            "services": ["Family Medicine", "Pediatrics", "Lab Services"],
+            "service_colors": ["bg-success", "bg-info", "bg-warning text-dark"],
+            "features": ["Family Practice", "Pediatric Care", "On-site Lab", "Wellness Programs"],
+            "specialties": ["Family Medicine", "Pediatrics", "Preventive Care"],
+        },
+        {
+            "id": 3,
+            "name": "Kellcare Specialty Institute",
+            "type": "Specialty Center",
+            "icon": "🔬",
+            "header_class": "bg-info text-white",
+            "btn_class": "btn-info",
+            "btn_outline": "btn-outline-info",
+            "address": {"street": "789 Research Drive", "district": "Medical Innovation Campus", "city": "New York", "state": "NY", "zip": "10003"},
+            "phone": "(555) 345-6789",
+            "hours": "Mon-Sat 7AM-7PM",
+            "parking": "Valet parking available",
+            "services": ["Cardiology", "Neurology", "Research"],
+            "service_colors": ["bg-danger", "bg-primary", "bg-secondary"],
+            "features": ["Advanced Diagnostics", "Clinical Research", "Specialist Care", "Research Programs"],
+            "specialties": ["Cardiology", "Neurology", "Medical Research"],
+        },
+    ]
+
+    # Add API-sourced doctors to locations
+    if doctors_data and "results" in doctors_data:
+        api_doctors = doctors_data["results"]
+        for i, location in enumerate(healthcare_locations):
+            # Assign doctors to locations based on specialization
+            if i < len(api_doctors):
+                doctor = api_doctors[i]
+                location["featured_doctor"] = {"name": doctor.get("name", "Dr. Unknown"), "specialization": doctor.get("specialization", "").replace("_", " ").title(), "department": doctor.get("department_name", "General Medicine"), "consultation_fee": doctor.get("consultation_fee", "200.00")}
+
+    # Dynamic department-based services
+    location_services = []
+    if departments_data and "results" in departments_data:
+        departments_list = departments_data["results"]
+        for dept in departments_list:
+            service = {"name": dept.get("name", "General Services"), "description": dept.get("description", "Comprehensive healthcare services"), "head": dept.get("head_of_department", "Medical Director"), "phone": dept.get("phone", "(555) 000-0000"), "email": dept.get("email", "info@kellcare.com")}
+            location_services.append(service)
+
+    # Pet therapy information
+    pet_therapy = {
         "dog_name": "Dexter",
+        "dog_breed": "Golden Retriever",
+        "dog_age": "3 years old",
         "dog_location": "Pet-Friendly Wellness Center",
+        "therapy_days": ["Monday", "Wednesday", "Friday"],
+        "program_description": "Our certified therapy dog program helps reduce patient anxiety and promotes healing through animal-assisted therapy.",
+        "services": ["Patient Visits", "Stress Reduction", "Child Therapy", "Recovery Support"],
     }
+
+    # Location statistics
+    location_stats = {"total_locations": len(healthcare_locations), "total_services": len(location_services), "emergency_locations": 1, "parking_spaces": "500+", "accessibility_rating": "100% ADA Compliant", "patient_satisfaction": 96.8}
+
+    # Operating hours for different location types
+    hours_info = {"emergency": "24/7/365 Emergency Care", "outpatient": "Mon-Fri 8AM-6PM, Sat 9AM-2PM", "specialty": "Mon-Sat 7AM-7PM", "weekend": "Weekend hours available at select locations"}
+
+    context = {
+        "page_title": "Our Healthcare Locations",
+        "page_description": "Find convenient Kellcare facilities near you. We're committed to providing accessible healthcare services across multiple locations.",
+        # Legacy context for existing template compatibility
+        "dog_name": pet_therapy["dog_name"],
+        "dog_location": pet_therapy["dog_location"],
+        # New dynamic context
+        "healthcare_locations": healthcare_locations,
+        "location_services": location_services,
+        "pet_therapy": pet_therapy,
+        "location_stats": location_stats,
+        "hours_info": hours_info,
+        "api_source": "Django REST Framework API",
+        "current_year": 2025,
+        "hospital_network": "Kellcare Healthcare Network",
+    }
+
     return render(request, "kellcare/locations.html", context)
 
 
@@ -195,57 +416,6 @@ def nursing_homes(request):
         "api_source": "Django REST Framework API + Geocoding API",  # Show data source
     }
     return render(request, "kellcare/nursing_homes.html", context)
-
-
-def pet_care(request):
-    """Pet Care Facilities page view - fully consuming Django REST Framework API"""
-    from .api_client import fetch_doctors, fetch_departments
-
-    # Consume API endpoints directly
-    doctors_data = fetch_doctors(request)
-    departments_data = fetch_departments(request)
-
-    # Process API response
-    total_vets = 0
-    total_pet_facilities = 8  # Default value
-    api_doctors = []
-
-    # Count departments that could be pet-related facilities
-    if departments_data and "results" in departments_data:
-        departments_list = departments_data["results"]
-        total_pet_facilities = len(departments_list) + 3  # Add some pet-specific facilities
-        print(f"DEBUG: Found {len(departments_list)} departments, total_pet_facilities = {total_pet_facilities}")
-
-    if doctors_data and "results" in doctors_data:
-        all_doctors = doctors_data["results"]
-        print(f"DEBUG: Found {len(all_doctors)} total doctors")
-
-        # Filter for veterinary doctors (general practitioners)
-        veterinary_doctors = [doc for doc in all_doctors if doc.get("specialization") == "general"]
-        print(f"DEBUG: Found {len(veterinary_doctors)} general practitioners")
-
-        total_vets = len(veterinary_doctors)
-        api_doctors = veterinary_doctors[:5]  # First 5 veterinary doctors
-
-        # If no general practitioners, count all doctors as potential vets
-        if total_vets == 0:
-            total_vets = len(all_doctors)
-            api_doctors = all_doctors[:5]
-            print(f"DEBUG: No general practitioners, using all {total_vets} doctors")
-
-    print(f"DEBUG: Final values - total_pet_facilities: {total_pet_facilities}, certified_vets: {total_vets}")
-
-    context = {
-        "featured_pet": "Dexter",
-        "featured_pet2": "Burt",
-        "pet_services": ["Veterinary Care", "Pet Grooming", "Pet Boarding", "Dog Training", "Pet Therapy", "Emergency Pet Care"],
-        "total_pet_facilities": total_pet_facilities,  # Now dynamic from API
-        "certified_vets": total_vets,  # From API
-        "api_doctors": api_doctors,  # From API
-        "api_example_url": request.build_absolute_uri("/api/doctors/"),
-        "api_source": "Django REST Framework API",  # Show data source
-    }
-    return render(request, "kellcare/pet_care.html", context)
 
 
 def about(request):
