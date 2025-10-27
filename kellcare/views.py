@@ -238,8 +238,6 @@ def urgent_care(request):
         "emergency_info": emergency_info,
         "urgent_care_stats": urgent_care_stats,
         "hours_info": hours_info,
-        # Pet therapy (if applicable to urgent care)
-        "pet_therapy": {"dog_name": "Comfort", "dog_breed": "Therapy Dog", "dog_age": "4 years old", "dog_location": "Emergency Waiting Areas", "description": "Our therapy dog provides comfort to patients and families during stressful emergency situations."},
         "api_source": "Django REST Framework API",
         "current_year": 2025,
         "hospital_network": "Kellcare Emergency Network",
