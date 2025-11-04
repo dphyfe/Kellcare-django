@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+
+
 from pathlib import Path
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,14 +22,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@67mg%$0+($(*-0k8s9b+*g6-@sx6pb(if)o#_99mc+t@-+4#d"
+SECRET_KEY = config(
+    "DJANGO_SECRET_KEY",
+    default="django-insecure-@67mg%$0+($(*-0k8s9b+*g6-@sx6pb(if)o#_99mc+t@-+4#d",
+)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+def _build_default_csrf_origins(hosts: list[str]) -> list[str]:
+    origins: list[str] = []
+    for host in hosts:
+        value = host.strip()
+        if not value:
+            continue
+        if value.startswith("http://") or value.startswith("https://"):
+            origins.append(value)
+            continue
+        origins.append(f"http://{value}")
+        origins.append(f"https://{value}")
+    return origins
 
+
+ALLOWED_HOSTS = config(
+    "DJANGO_ALLOWED_HOSTS",
+    default="kellcare-aci.eastus.azurecontainer.io",
+    cast=Csv(),
+)
 
 # Application definition
 
@@ -190,6 +211,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # Angular default
     "http://127.0.0.1:4200",
 ]
+
+CSRF_TRUSTED_ORIGINS = config(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    default=",".join(_build_default_csrf_origins(ALLOWED_HOSTS)),
+    cast=Csv(),
+)
 
 # For development only - remove in production
 CORS_ALLOW_ALL_ORIGINS = True
