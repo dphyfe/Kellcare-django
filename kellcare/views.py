@@ -1,15 +1,11 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from .forms import ContactForm
 
 
 def home(request):
-    """Home page view"""
-    return render(request, "kellcare/home.html")
-
-
-def bestsellers(request):
-    """Bestsellers page view - now with dynamic context data"""
+    """Unified Home page with featured services and top medical talent"""
     from .api_client import fetch_doctors, fetch_departments
 
     # Fetch data from API endpoints
@@ -111,9 +107,31 @@ def bestsellers(request):
     if doctors_data and "results" in doctors_data:
         department_stats["total_doctors"] = len(doctors_data["results"])
 
+    feature_cards = [
+        {
+            "title": "Quality Care",
+            "description": "Compassionate physicians, nurses, and specialists delivering personalized, evidence-based treatment plans.",
+            "icon": "🏥",
+        },
+        {
+            "title": "24/7 Support",
+            "description": "Always-on clinical triage, telehealth consultations, and rapid urgent care access when you need it most.",
+            "icon": "🕒",
+        },
+        {
+            "title": "Modern Facilities",
+            "description": "State-of-the-art diagnostics, surgical centers, and recovery suites designed for comfort and positive outcomes.",
+            "icon": "🔬",
+        },
+    ]
+
     context = {
-        "page_title": "Our Most Popular Services",
-        "page_description": "Discover our most sought-after healthcare services and top-rated medical professionals trusted by thousands of patients.",
+        "page_title": "Welcome to Kellcare Healthcare Network",
+        "page_description": "Your trusted partner for comprehensive healthcare solutions—discover our most-loved services and medical experts in one place.",
+        "hero_button_label": "Explore Our Services",
+        "hero_button_url": reverse("kellcare:services"),
+        "feature_section_heading": "Care Highlights",
+        "feature_cards": feature_cards,
         "bestseller_services": bestseller_services,
         "top_doctors": top_doctors,
         "department_stats": department_stats,
@@ -122,17 +140,20 @@ def bestsellers(request):
         "hospital_name": "Kellcare Healthcare Network",
     }
 
-    return render(request, "kellcare/bestsellers.html", context)
+    return render(request, "kellcare/home.html", context)
+
+
+def bestsellers(request):
+    """Legacy bestsellers route now points to the unified home experience."""
+    return redirect("kellcare:home")
 
 
 def urgent_care(request):
     """Urgent Care page view - specialized for emergency and urgent medical services"""
-    from .api_client import fetch_doctors, fetch_departments
-    import random
+    from .api_client import fetch_doctors
 
     # Fetch data from API endpoints
     doctors_data = fetch_doctors(request)
-    departments_data = fetch_departments(request)
 
     # Urgent care specific locations
     urgent_care_locations = [
@@ -294,7 +315,7 @@ def locations(request):
         # YOUR CUSTOM CONTEXT - Add any data you want here
         "custom_message": "Welcome to Kellcare Healthcare Network!",
         "company_founded": 1995,
-        "ceo_name": "Dr. Sarah Mitchell",
+        "ceo_name": "Dr. Kelly Norcutt",
         "awards": ["Best Healthcare Provider 2024", "Excellence in Patient Care 2023", "Innovation Award 2022"],
         "featured_services": {"emergency": "24/7 Emergency Care", "telehealth": "Virtual Consultations", "specialist": "Expert Specialist Care"},
         "patient_satisfaction": 98.5,

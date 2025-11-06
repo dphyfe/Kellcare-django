@@ -4,38 +4,197 @@
 
 {% block content %}
 <div class="jumbotron bg-light p-5 rounded-lg mb-4">
-    <h1 class="display-4">Welcome to Kellcare</h1>
-    <p class="lead">Your trusted partner in healthcare solutions. We provide comprehensive medical services tailored to
-        your needs.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'kellcare:services' %}" role="button">Our Services</a>
+    <h1 class="display-4">{{ page_title }}</h1>
+    <p class="lead">{{ page_description }}</p>
+    {% if hero_button_url and hero_button_label %}
+    <a class="btn btn-primary btn-lg" href="{{ hero_button_url }}" role="button">{{ hero_button_label }}</a>
+    {% endif %}
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card">
+{% if feature_cards %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">{{ feature_section_heading }}</h2>
+    </div>
+
+    {% for feature in feature_cards %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
             <div class="card-body">
-                <h5 class="card-title">Quality Care</h5>
-                <p class="card-text">We provide the highest quality healthcare services with experienced professionals.
-                </p>
+                {% if feature.icon %}
+                <div class="mb-3" style="font-size: 2rem;">{{ feature.icon }}</div>
+                {% endif %}
+                <h5 class="card-title">{{ feature.title }}</h5>
+                <p class="card-text">{{ feature.description }}</p>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">24/7 Support</h5>
-                <p class="card-text">Our healthcare professionals are available round the clock for your medical needs.
-                </p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Top Services Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Most Popular Services</h2>
+    </div>
+
+    {% for service in bestseller_services %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 {{ service.border_class }}">
+            <div class="card-header {{ service.badge_class }} text-center">
+                <h5 class="mb-0">{{ service.badge }}</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-2" style="font-size: 2rem;">{{ service.icon }}</div>
+                <h4 class="card-title">{{ service.title }}</h4>
+                <p class="card-text">{{ service.description }}</p>
+                <div class="mb-3">
+                    <span class="badge bg-success fs-6">{{ service.satisfaction }}% Patient Satisfaction</span>
+                </div>
+                <div class="mb-3">
+                    <strong class="text-primary fs-5">${{ service.current_price }}</strong>
+                    <small class="text-muted"><s>${{ service.original_price }}</s></small>
+                </div>
+                <p class="text-muted">⏱️ {{ service.duration }} | 👥 {{ service.completed }} completed</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:services' %}" class="btn {{ service.btn_class }} w-100">Book Now</a>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card">
+    {% endfor %}
+</div>
+
+<!-- Top Rated Doctors Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Top Rated Doctors</h2>
+        <p class="text-center text-muted mb-4">Meet our most trusted and experienced medical professionals</p>
+    </div>
+
+    {% for doctor in top_doctors %}
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">Modern Facilities</h5>
-                <p class="card-text">State-of-the-art medical equipment and facilities for comprehensive healthcare.</p>
+                <div class="rounded-circle {{ doctor.bg_class }} text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                    {{ doctor.emoji }}
+                </div>
+                <h5 class="card-title">{{ doctor.name }}</h5>
+                <p class="card-text text-muted">{{ doctor.specialization }}</p>
+                <div class="mb-2">
+                    <span class="text-warning">{{ doctor.rating_stars }}</span>
+                    <small class="text-muted">({{ doctor.rating }}/5)</small>
+                </div>
+                <p class="small">{{ doctor.experience }} experience<br>{{ doctor.achievement }}</p>
+                {% if doctor.consultation_fee %}
+                <p class="text-primary"><strong>Consultation: ${{ doctor.consultation_fee }}</strong></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Special Offers Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Special Healthcare Packages</h2>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🎯 Most Popular Package</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Annual Wellness Package</h4>
+                <ul class="list-unstyled">
+                    <li>✅ 4 General Health Checkups</li>
+                    <li>✅ Annual Blood Work Panel</li>
+                    <li>✅ Dental Cleaning (2x)</li>
+                    <li>✅ Eye Examination</li>
+                    <li>✅ Vaccination Updates</li>
+                    <li>✅ 24/7 Telemedicine Access</li>
+                </ul>
+                <div class="text-center">
+                    <strong class="text-success fs-4">$599</strong>
+                    <small class="text-muted"><s>$899</s> (Save $300)</small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:contact' %}" class="btn btn-success w-100">Get This Package</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">👨‍👩‍👧‍👦 Family Favorite</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Family Care Package</h4>
+                <ul class="list-unstyled">
+                    <li>✅ Health Checkups for 4 Members</li>
+                    <li>✅ Pediatric Care (2 Children)</li>
+                    <li>✅ Family Medical History Setup</li>
+                    <li>✅ Emergency Care Priority</li>
+                    <li>✅ Health Education Sessions</li>
+                    <li>✅ Nutrition Counseling</li>
+                </ul>
+                <div class="text-center">
+                    <strong class="text-primary fs-4">$799</strong>
+                    <small class="text-muted"><s>$1,199</s> (Save $400)</small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'kellcare:contact' %}" class="btn btn-primary w-100">Get This Package</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Statistics Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="bg-light p-4 rounded">
+            <h3 class="text-center mb-4">Why Patients Choose {{ hospital_name }}</h3>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h2 class="text-primary">{{ department_stats.treatments_completed }}</h2>
+                    <p class="text-muted">Happy Patients</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-success">{{ department_stats.patient_satisfaction }}%</h2>
+                    <p class="text-muted">Patient Satisfaction</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-info">{{ department_stats.total_doctors }}+</h2>
+                    <p class="text-muted">Expert Doctors</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-warning">24/7</h2>
+                    <p class="text-muted">Emergency Care</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="row">
+    <div class="col-12">
+        <div class="text-center bg-primary text-white p-5 rounded">
+            <h3>Ready to Experience Premium Healthcare?</h3>
+            <p class="lead">Join thousands of satisfied patients who trust {{ hospital_name }} for their health needs.</p>
+            <div class="mb-3">
+                <small class="text-white-50">Powered by {{ api_source }} • Updated {{ current_year }}</small>
+            </div>
+            <a href="{% url 'kellcare:contact' %}" class="btn btn-light btn-lg me-3">Contact Us</a>
+            <a href="{% url 'kellcare:services' %}" class="btn btn-outline-light btn-lg">View All Services</a>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

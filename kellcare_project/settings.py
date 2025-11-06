@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-
-
 from pathlib import Path
 from decouple import Csv, config
 
@@ -28,6 +26,7 @@ SECRET_KEY = config(
 )
 
 DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
+
 
 def _build_default_csrf_origins(hosts: list[str]) -> list[str]:
     origins: list[str] = []
@@ -48,6 +47,8 @@ ALLOWED_HOSTS = config(
     default="kellcare-aci.eastus.azurecontainer.io",
     cast=Csv(),
 )
+
+ALLOWED_HOSTS.extend(host for host in ("localhost", "127.0.0.1", "0.0.0.0") if host not in ALLOWED_HOSTS)
 
 # Application definition
 
