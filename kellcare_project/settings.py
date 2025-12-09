@@ -44,7 +44,11 @@ def _build_default_csrf_origins(hosts: list[str]) -> list[str]:
 
 ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
-    default="kellcare-aci.eastus.azurecontainer.io",
+    default=(
+        "kellcare-aci.eastus.azurecontainer.io,"
+        "kellcare-aci.fce3hvg4gta3cwfa.eastus.azurecontainer.io,"
+        "kellcare.dphyfe.com"
+    ),
     cast=Csv(),
 )
 
