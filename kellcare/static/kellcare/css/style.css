@@ -1,19 +1,36 @@
 /* Kellcare Custom Styles */
 
 :root {
-    --primary-color: #007bff;
+    --primary-color: #0a84ff;
     --secondary-color: #73e49e;
     --success-color: #28a745;
     --danger-color: #dc3545;
     --warning-color: #ffc107;
     --info-color: #17a2b8;
-    --light-color: #f8f9fa;
-    --dark-color: #343a40;
+    --light-color: #1a2533;
+    --dark-color: #0b1017;
+    --surface-color: #111827;
+    --muted-color: #9fb3c8;
+    --border-color: #1f2a3a;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
+    background-color: var(--dark-color);
+    color: #e8edf5;
+}
+
+main.container {
+    background: none;
+}
+
+a {
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: #66b0ff;
 }
 
 /* Navigation */
@@ -22,28 +39,71 @@ body {
     font-size: 1.5rem;
 }
 
+.navbar.bg-primary {
+    background: linear-gradient(90deg, #0066ff 0%, #0091ff 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar .nav-link {
+    color: #e8edf5;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #b9d8ff;
+}
+
 /* Cards */
 .card {
     transition: transform 0.2s ease-in-out;
-    border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    background-color: var(--surface-color);
+    color: #e8edf5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.card .card-text,
+.card .text-muted,
+.card small {
+    color: var(--muted-color) !important;
 }
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+.card-header,
+.card-footer {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: var(--border-color);
 }
 
 /* Jumbotron */
 .jumbotron {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: radial-gradient(circle at 0% 0%, #1e4ed8 0%, #5b21b6 65%, #1f2937 100%);
+    color: #f8fafc;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 /* Forms */
 .form-control:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Dark backgrounds for Bootstrap helpers */
+.bg-light {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.bg-white {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.text-muted {
+    color: var(--muted-color) !important;
 }
 
 /* Buttons */
@@ -57,15 +117,44 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #0b74e3;
+    border-color: #0b74e3;
+}
+
+.btn-outline-light {
+    color: #f8fafc;
+    border-color: #f8fafc;
+}
+
+.btn-outline-light:hover,
+.btn-outline-light:focus {
+    background-color: #f8fafc;
+    color: #0b1017;
+}
+
 /* Footer */
 footer {
     margin-top: auto;
+    background-color: #0a0f16;
+    color: #dbe5f1;
 }
 
 /* Utilities */
 .text-primary {
     color: var(--primary-color) !important;
 }
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -81,6 +170,15 @@ footer {
 /* Animation for page load */
 .container {
     animation: fadeIn 0.5s ease-in;
+}
+
+.container h1,
+.container h2,
+.container h3,
+.container h4,
+.container h5,
+.container h6 {
+    color: #f8fafc;
 }
 
 @keyframes fadeIn {
